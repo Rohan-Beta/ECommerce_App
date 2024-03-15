@@ -54,10 +54,43 @@ class _SignInScreenState extends State<SignInScreen> {
                     SizedBox(
                       width: screenSize.width,
                       height: 280,
-                      child: Image.asset("MyAssets/imagess/login.jpg"),
+                      child: Image.asset("MyAssets/imagess/register.jpg"),
                     ),
                     SizedBox(
                       height: 10,
+                    ),
+                    Padding(
+                      padding: const EdgeInsets.all(8.0),
+                      child: Container(
+                        decoration: BoxDecoration(
+                          color: Colors.white24,
+                          borderRadius: BorderRadius.all(
+                            Radius.circular(30),
+                          ),
+                          boxShadow: [
+                            BoxShadow(
+                              blurRadius: 8,
+                              color: Colors.black26,
+                              offset: Offset(0, -3),
+                            )
+                          ],
+                        ),
+                        child: Column(
+                          children: [
+                            Form(
+                              key: formKey2,
+                              child: Column(
+                                children: [
+                                  // name
+
+                                  MyTextForm().myText(nameController, "Name",
+                                      "Name can not be empty", Icons.person),
+                                ],
+                              ),
+                            )
+                          ],
+                        ),
+                      ),
                     ),
                     Padding(
                       padding: const EdgeInsets.all(8.0),
@@ -88,39 +121,6 @@ class _SignInScreenState extends State<SignInScreen> {
                                       "Yours@gmail.com",
                                       "Email can not be empty",
                                       Icons.mail),
-                                ],
-                              ),
-                            )
-                          ],
-                        ),
-                      ),
-                    ),
-                    Padding(
-                      padding: const EdgeInsets.all(8.0),
-                      child: Container(
-                        decoration: BoxDecoration(
-                          color: Colors.white24,
-                          borderRadius: BorderRadius.all(
-                            Radius.circular(30),
-                          ),
-                          boxShadow: [
-                            BoxShadow(
-                              blurRadius: 8,
-                              color: Colors.black26,
-                              offset: Offset(0, -3),
-                            )
-                          ],
-                        ),
-                        child: Column(
-                          children: [
-                            Form(
-                              key: formKey2,
-                              child: Column(
-                                children: [
-                                  // name
-
-                                  MyTextForm().myText(nameController, "Name",
-                                      "Name can not be empty", Icons.person),
                                 ],
                               ),
                             )
@@ -233,10 +233,16 @@ class _SignInScreenState extends State<SignInScreen> {
                               style: ElevatedButton.styleFrom(
                                   backgroundColor: Colors.white24),
                               child: const Text(
-                                "Sign-In",
+                                "SignIn",
                                 style: TextStyle(color: Colors.white),
                               ),
-                              onPressed: () {},
+                              onPressed: () {
+                                if (formKey.currentState!.validate() &&
+                                    formKey1.currentState!.validate() &&
+                                    formKey2.currentState!.validate()) {
+                                  validateUserEmail();
+                                }
+                              },
                             ),
                           ),
                         ),
