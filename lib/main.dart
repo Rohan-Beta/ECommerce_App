@@ -16,26 +16,28 @@ class MyApp extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return GetMaterialApp(
-        debugShowCheckedModeBanner: false,
-        title: 'Ecommerce Store',
-        theme: ThemeData(
-          primarySwatch: Colors.purple,
-        ),
-        // theme: ThemeData(
-        //   colorScheme: ColorScheme.fromSeed(seedColor: Colors.deepPurple),
-        //   useMaterial3: true,
-        // ),
-        home: Scaffold(
-          body: SafeArea(
-            child: FutureBuilder(
-              builder: (context, snapshot) {
-                return LogInScreen();
-              },
-              future: Future.delayed(
-                Duration(seconds: 1),
-              ),
+      debugShowCheckedModeBanner: false,
+      title: 'Ecommerce Store',
+      // theme: ThemeData(
+      //   primarySwatch: Colors.purple,
+      //   useMaterial3: true,
+      // ),
+      // theme: ThemeData(
+      //   colorScheme: ColorScheme.fromSeed(seedColor: Colors.deepPurple),
+      //   useMaterial3: true,
+      // ),
+      home: Scaffold(
+        body: SafeArea(
+          child: FutureBuilder(
+            builder: (context, snapshot) {
+              return LogInScreen();
+            },
+            future: Future.delayed(
+              Duration(seconds: 1),
             ),
           ),
-        ));
+        ),
+      ),
+    );
   }
 }
