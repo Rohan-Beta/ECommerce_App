@@ -1,9 +1,14 @@
-// ignore_for_file: prefer_const_constructors, prefer_const_literals_to_create_immutables
+// ignore_for_file: prefer_const_constructors, prefer_const_literals_to_create_immutables, empty_catches
 
+import 'dart:convert';
+
+import 'package:ecommerce/api_connection/api_connection.dart';
 import 'package:ecommerce/utilss/screen_size.dart';
 import 'package:ecommerce/utilss/text_form_format.dart';
 import 'package:flutter/material.dart';
+import 'package:fluttertoast/fluttertoast.dart';
 import 'package:get/get.dart';
+import 'package:http/http.dart' as http;
 
 class SignInScreen extends StatefulWidget {
   const SignInScreen({super.key});
@@ -23,6 +28,27 @@ class _SignInScreenState extends State<SignInScreen> {
   TextEditingController nameController = TextEditingController();
 
   var isObsecure = true.obs;
+
+  validateUserEmail() async {
+    try {
+      var res = await http.post(
+        Uri.parse(API.validateEmail),
+        body: {
+          'user_email': emailController.text.trim(),
+        },
+      );
+      if (res.statusCode == 200) {
+        //connection with api to server success
+
+        var resBody = jsonDecode(res.body);
+
+        if (resBody['emailFound'] == true) {
+          Fluttertoast.showToast(
+              msg: "Email already exists. Try another email");
+        }
+      }
+    } catch (e) {}
+  }
 
   @override
   Widget build(BuildContext context) {
