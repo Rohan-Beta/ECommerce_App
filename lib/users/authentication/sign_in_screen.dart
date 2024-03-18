@@ -1,8 +1,9 @@
-// ignore_for_file: prefer_const_constructors, prefer_const_literals_to_create_immutables, empty_catches
+// ignore_for_file: prefer_const_constructors, prefer_const_literals_to_create_immutables, empty_catches, non_constant_identifier_names
 
 import 'dart:convert';
 
 import 'package:ecommerce/api_connection/api_connection.dart';
+import 'package:ecommerce/users/modell/user_model.dart';
 import 'package:ecommerce/utilss/screen_size.dart';
 import 'package:ecommerce/utilss/text_form_format.dart';
 import 'package:flutter/material.dart';
@@ -40,14 +41,53 @@ class _SignInScreenState extends State<SignInScreen> {
       if (res.statusCode == 200) {
         //connection with api to server success
 
-        var resBody = jsonDecode(res.body);
+        var resBodyOfValidateEmail = jsonDecode(res.body);
 
-        if (resBody['emailFound'] == true) {
+        if (resBodyOfValidateEmail['emailFound'] == true) {
           Fluttertoast.showToast(
               msg: "Email already exists. Try another email");
+        } else {
+          // register and save new user record to db
+          registerAndSaveUserRecord();
         }
       }
-    } catch (e) {}
+    } catch (e) {
+      print(e.toString());
+      Fluttertoast.showToast(msg: e.toString());
+    }
+  }
+
+  registerAndSaveUserRecord() async {
+    UserModel user_model = UserModel(
+      user_id: 1,
+      user_name: nameController.text.trim(),
+      user_email: emailController.text.trim(),
+      user_password: passwordController.text.trim(),
+    );
+    try {
+      var res = await http.post(
+        Uri.parse(API.signUp),
+        body: user_model.toJson(),
+      );
+      if (res.statusCode == 200) {
+        var resBodyOfSingIn = jsonDecode(res.body);
+
+        if (resBodyOfSingIn['success'] == true) {
+          Fluttertoast.showToast(msg: "SingIn Successfully");
+
+          setState(() {
+            nameController.clear();
+            emailController.clear();
+            passwordController.clear();
+          });
+        } else {
+          Fluttertoast.showToast(msg: "Error Occured , try again");
+        }
+      }
+    } catch (e) {
+      print(e.toString());
+      Fluttertoast.showToast(msg: e.toString());
+    }
   }
 
   @override
