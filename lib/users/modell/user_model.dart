@@ -13,6 +13,13 @@ class UserModel {
     required this.user_password,
   });
 
+  factory UserModel.fromJson(Map<String, dynamic> json) => UserModel(
+        user_id: int.parse(json["user_id"]),
+        user_name: json["user_name"],
+        user_email: json["user_email"],
+        user_password: json["user_password"],
+      );
+
   Map<String, dynamic> toJson() => {
         "user_id": user_id.toString(),
         "user_name": user_name,

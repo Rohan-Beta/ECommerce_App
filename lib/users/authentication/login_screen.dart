@@ -1,11 +1,19 @@
 // ignore_for_file: prefer_const_constructors, prefer_const_literals_to_create_immutables
 
+import 'dart:convert';
+
+import 'package:ecommerce/api_connection/api_connection.dart';
 import 'package:ecommerce/users/authentication/sign_in_screen.dart';
+import 'package:ecommerce/users/fragments/dashboard_of_fragments.dart';
+import 'package:ecommerce/users/modell/user_model.dart';
+import 'package:ecommerce/users/userSharedPreferences/user_shared_preferences.dart';
 import 'package:ecommerce/utilss/next_screen.dart';
 import 'package:ecommerce/utilss/screen_size.dart';
 import 'package:ecommerce/utilss/text_form_format.dart';
 import 'package:flutter/material.dart';
+import 'package:fluttertoast/fluttertoast.dart';
 import 'package:get/get.dart';
+import 'package:http/http.dart' as http;
 
 class LogInScreen extends StatefulWidget {
   const LogInScreen({super.key});
@@ -23,6 +31,41 @@ class _LogInScreenState extends State<LogInScreen> {
   TextEditingController passwordController = TextEditingController();
 
   var isObsecure = true.obs;
+
+  loginUser() async {
+    try {
+      var res = await http.post(
+        Uri.parse(API.login),
+        body: {
+          "user_email": emailController.text.trim(),
+          "user_password": passwordController.text.trim(),
+        },
+      );
+      if (res.statusCode == 200) {
+        var resBodyOfLogIn = jsonDecode(res.body);
+
+        if (resBodyOfLogIn['success'] == true) {
+          Fluttertoast.showToast(msg: "LogIn Successfully ^-^");
+
+          UserModel userInfo = UserModel.fromJson(resBodyOfLogIn["userData"]);
+
+          // save user data to local storage
+
+          await RememberUserPrefs.saveAndRememberUser(userInfo);
+
+          Future.delayed(Duration(seconds: 1), () {
+            Get.to(DashboardOfFragments());
+          });
+        } else {
+          Fluttertoast.showToast(
+              msg: "Please provide correct email or password , try again!");
+        }
+      }
+    } catch (e) {
+      print(e.toString());
+      Fluttertoast.showToast(msg: e.toString());
+    }
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -164,7 +207,14 @@ class _LogInScreenState extends State<LogInScreen> {
                                           "LogIn",
                                           style: TextStyle(color: Colors.white),
                                         ),
-                                        onPressed: () {},
+                                        onPressed: () {
+                                          if (formKey.currentState!
+                                                  .validate() &&
+                                              formKey1.currentState!
+                                                  .validate()) {
+                                            loginUser();
+                                          }
+                                        },
                                       ),
                                     ),
                                   ],

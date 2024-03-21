@@ -5,6 +5,7 @@ class API {
   // sign in user
   static const validateEmail = "$hostConnect/user/validate_email.php";
   static const signUp = "$hostConnect/user/signup.php";
+  static const login = "$hostConnect/user/login.php";
 }
 
 // static const hostConnect = "http://ipaddress/file name in htdocs";
