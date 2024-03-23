@@ -1,5 +1,5 @@
 class API {
-  static const hostConnect = "http://192.168.0.7/api_ecommerce";
+  static const hostConnect = "http://192.168.0.6/api_ecommerce";
   static const hostConnectUser = "$hostConnect/user";
 
   // sign in user

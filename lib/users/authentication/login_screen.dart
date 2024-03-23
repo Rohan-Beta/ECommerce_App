@@ -208,12 +208,12 @@ class _LogInScreenState extends State<LogInScreen> {
                                           style: TextStyle(color: Colors.white),
                                         ),
                                         onPressed: () {
-                                          if (formKey.currentState!
-                                                  .validate() &&
-                                              formKey1.currentState!
-                                                  .validate()) {
-                                            loginUser();
-                                          }
+                                          // if (formKey.currentState!
+                                          //         .validate() &&
+                                          //     formKey1.currentState!
+                                          //         .validate()) {
+                                          //   loginUser();
+                                          // }
                                         },
                                       ),
                                     ),
