@@ -45,7 +45,7 @@ class _SignInScreenState extends State<SignInScreen> {
 
         if (resBodyOfValidateEmail['emailFound'] == true) {
           Fluttertoast.showToast(
-              msg: "Email already exists. Try another email *-*");
+              msg: "Email already exists. Try another email!");
         } else {
           // register and save new user record to db
           registerAndSaveUserRecord();
@@ -73,7 +73,7 @@ class _SignInScreenState extends State<SignInScreen> {
         var resBodyOfSingIn = jsonDecode(res.body);
 
         if (resBodyOfSingIn['success'] == true) {
-          Fluttertoast.showToast(msg: "SingIn Successfully ^-^");
+          Fluttertoast.showToast(msg: "SingIn Successfully");
 
           setState(() {
             nameController.clear();
@@ -144,7 +144,7 @@ class _SignInScreenState extends State<SignInScreen> {
                         child: Column(
                           children: [
                             Form(
-                              key: formKey2,
+                              key: formKey,
                               child: Column(
                                 children: [
                                   // name
@@ -177,7 +177,7 @@ class _SignInScreenState extends State<SignInScreen> {
                         child: Column(
                           children: [
                             Form(
-                              key: formKey,
+                              key: formKey1,
                               child: Column(
                                 children: [
                                   // email
@@ -213,7 +213,7 @@ class _SignInScreenState extends State<SignInScreen> {
                         child: Column(
                           children: [
                             Form(
-                              key: formKey1,
+                              key: formKey2,
                               child: Column(
                                 children: [
                                   // password

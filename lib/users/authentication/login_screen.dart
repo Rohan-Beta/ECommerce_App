@@ -25,7 +25,7 @@ class LogInScreen extends StatefulWidget {
 class _LogInScreenState extends State<LogInScreen> {
   Size screenSize = MyScreenSize().getScreenSize();
   var formKey = GlobalKey<FormState>();
-  var formKey1 = GlobalKey<FormState>();
+  // var formKey1 = GlobalKey<FormState>();
 
   TextEditingController emailController = TextEditingController();
   TextEditingController passwordController = TextEditingController();
@@ -208,12 +208,10 @@ class _LogInScreenState extends State<LogInScreen> {
                                           style: TextStyle(color: Colors.white),
                                         ),
                                         onPressed: () {
-                                          // if (formKey.currentState!
-                                          //         .validate() &&
-                                          //     formKey1.currentState!
-                                          //         .validate()) {
-                                          //   loginUser();
-                                          // }
+                                          if (formKey.currentState!
+                                              .validate()) {
+                                            loginUser();
+                                          }
                                         },
                                       ),
                                     ),
