@@ -45,7 +45,7 @@ class _SignInScreenState extends State<SignInScreen> {
 
         if (resBodyOfValidateEmail['emailFound'] == true) {
           Fluttertoast.showToast(
-              msg: "Email already exists. Try another email!");
+              msg: "Email already exists. Try another email 'o'");
         } else {
           // register and save new user record to db
           registerAndSaveUserRecord();
@@ -73,7 +73,7 @@ class _SignInScreenState extends State<SignInScreen> {
         var resBodyOfSingIn = jsonDecode(res.body);
 
         if (resBodyOfSingIn['success'] == true) {
-          Fluttertoast.showToast(msg: "SingIn Successfully");
+          Fluttertoast.showToast(msg: "SingIn Successfully :)");
 
           setState(() {
             nameController.clear();

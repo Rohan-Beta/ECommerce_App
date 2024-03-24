@@ -4,7 +4,7 @@ import 'dart:convert';
 
 import 'package:ecommerce/api_connection/api_connection.dart';
 import 'package:ecommerce/users/authentication/sign_in_screen.dart';
-import 'package:ecommerce/users/fragments/dashboard_of_fragments.dart';
+import 'package:ecommerce/users/fragments_screen/dashboard_of_fragments_screen.dart';
 import 'package:ecommerce/users/modell/user_model.dart';
 import 'package:ecommerce/users/userSharedPreferences/user_shared_preferences.dart';
 import 'package:ecommerce/utilss/next_screen.dart';
@@ -25,7 +25,6 @@ class LogInScreen extends StatefulWidget {
 class _LogInScreenState extends State<LogInScreen> {
   Size screenSize = MyScreenSize().getScreenSize();
   var formKey = GlobalKey<FormState>();
-  // var formKey1 = GlobalKey<FormState>();
 
   TextEditingController emailController = TextEditingController();
   TextEditingController passwordController = TextEditingController();
@@ -51,14 +50,14 @@ class _LogInScreenState extends State<LogInScreen> {
 
           // save user data to local storage
 
-          await RememberUserPrefs.saveAndRememberUser(userInfo);
+          await RememberUserPrefs.storeUserInfo(userInfo);
 
           Future.delayed(Duration(seconds: 1), () {
-            Get.to(DashboardOfFragments());
+            Get.to(DashboardOfFragmentsScreen());
           });
         } else {
           Fluttertoast.showToast(
-              msg: "Please provide correct email or password , try again!");
+              msg: "Please provide correct email or password , try again `-`");
         }
       }
     } catch (e) {
