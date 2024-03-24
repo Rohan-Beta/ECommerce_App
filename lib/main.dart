@@ -1,6 +1,7 @@
 // ignore_for_file: prefer_const_constructors
 
 import 'package:ecommerce/users/authentication/login_screen.dart';
+import 'package:ecommerce/users/fragments_screen/dashboard_of_fragments_screen.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 
@@ -29,7 +30,8 @@ class MyApp extends StatelessWidget {
         body: SafeArea(
           child: FutureBuilder(
             builder: (context, snapshot) {
-              return LogInScreen();
+              // return LogInScreen();
+              return DashboardOfFragmentsScreen();
             },
             future: Future.delayed(
               Duration(seconds: 1),

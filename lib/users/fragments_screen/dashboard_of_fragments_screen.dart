@@ -44,6 +44,8 @@ class DashboardOfFragmentsScreen extends StatelessWidget {
     },
   ];
 
+  RxInt _indexNumber = 0.obs;
+
   @override
   Widget build(BuildContext context) {
     return GetBuilder(
@@ -52,7 +54,38 @@ class DashboardOfFragmentsScreen extends StatelessWidget {
         _rememberCurrentUser.getUserInfo();
       },
       builder: (controller) {
-        return Scaffold();
+        return Scaffold(
+          body: SafeArea(
+            child: Obx(
+              () => _fragmentScreens[_indexNumber.value],
+            ),
+          ),
+          backgroundColor: Colors.black,
+          bottomNavigationBar: Obx(
+            () => BottomNavigationBar(
+              currentIndex: _indexNumber.value,
+              onTap: (value) {
+                _indexNumber.value = value;
+              },
+              showSelectedLabels: true,
+              showUnselectedLabels: true,
+              selectedItemColor: Colors.white,
+              unselectedItemColor: Colors.white24,
+              items: List.generate(
+                4,
+                (index) {
+                  var navBottonProperty = _navigationButtons[index];
+                  return BottomNavigationBarItem(
+                    backgroundColor: Colors.black,
+                    icon: Icon(navBottonProperty["non_active_icon"]),
+                    activeIcon: Icon(navBottonProperty["active_icon"]),
+                    label: navBottonProperty["label"],
+                  );
+                },
+              ),
+            ),
+          ),
+        );
       },
     );
   }
