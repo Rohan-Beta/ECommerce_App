@@ -1,4 +1,4 @@
-// ignore_for_file: prefer_const_constructors, prefer_const_literals_to_create_immutables
+// ignore_for_file: prefer_const_constructors, prefer_const_literals_to_create_immutables, avoid_print
 
 import 'dart:convert';
 
@@ -53,11 +53,12 @@ class _LogInScreenState extends State<LogInScreen> {
           await RememberUserPrefs.storeUserInfo(userInfo);
 
           Future.delayed(Duration(seconds: 1), () {
-            Get.to(DashboardOfFragmentsScreen());
+            nextScreenReplace(context, DashboardOfFragmentsScreen());
+            // Get.to(DashboardOfFragmentsScreen());
           });
         } else {
           Fluttertoast.showToast(
-              msg: "Please provide correct email or password , try again `-`");
+              msg: "Please enter valid email or password , try again `-`");
         }
       }
     } catch (e) {
