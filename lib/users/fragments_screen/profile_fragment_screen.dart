@@ -3,7 +3,6 @@
 import 'package:ecommerce/users/authentication/login_screen.dart';
 import 'package:ecommerce/users/userSharedPreferences/current_user.dart';
 import 'package:ecommerce/users/userSharedPreferences/user_shared_preferences.dart';
-import 'package:ecommerce/utilss/next_screen.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 

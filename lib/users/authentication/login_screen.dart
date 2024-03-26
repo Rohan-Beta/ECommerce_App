@@ -9,11 +9,11 @@ import 'package:ecommerce/users/modell/user_model.dart';
 import 'package:ecommerce/users/userSharedPreferences/user_shared_preferences.dart';
 import 'package:ecommerce/utilss/next_screen.dart';
 import 'package:ecommerce/utilss/screen_size.dart';
-import 'package:ecommerce/utilss/text_form_format.dart';
 import 'package:flutter/material.dart';
 import 'package:fluttertoast/fluttertoast.dart';
 import 'package:get/get.dart';
 import 'package:http/http.dart' as http;
+import 'package:rive/rive.dart';
 
 class LogInScreen extends StatefulWidget {
   const LogInScreen({super.key});
@@ -30,6 +30,14 @@ class _LogInScreenState extends State<LogInScreen> {
   TextEditingController passwordController = TextEditingController();
 
   var isObsecure = true.obs;
+
+  var animationLink = "MyAssets/imagess/login.riv";
+  SMIInput<bool>? isChecking;
+  SMIInput<bool>? isHandsUp;
+  SMIInput<bool>? trigSuccess;
+  SMIInput<bool>? trigFail;
+  SMIInput<int>? numLook;
+  late StateMachineController? stateMachineController;
 
   loginUser() async {
     try {
@@ -53,10 +61,21 @@ class _LogInScreenState extends State<LogInScreen> {
           await RememberUserPrefs.storeUserInfo(userInfo);
 
           Future.delayed(Duration(seconds: 1), () {
+            isChecking!.change(false);
+            isHandsUp!.change(false);
+            trigFail!.change(false);
+            trigSuccess!.change(true);
+
             nextScreenReplace(context, DashboardOfFragmentsScreen());
+
             // Get.to(DashboardOfFragmentsScreen());
           });
         } else {
+          isChecking!.change(false);
+          isHandsUp!.change(false);
+          trigSuccess!.change(false);
+          trigFail!.change(true);
+
           Fluttertoast.showToast(
               msg: "Please enter valid email or password , try again `-`");
         }
@@ -67,10 +86,20 @@ class _LogInScreenState extends State<LogInScreen> {
     }
   }
 
+  void lookOnTheTextField() {
+    isHandsUp?.change(false);
+    isChecking?.change(true);
+    numLook?.change(0);
+  }
+
+  void moveEyeBalls(val) {
+    numLook?.change(val.length.toDouble());
+  }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      backgroundColor: Colors.black,
+      // backgroundColor: Colors.lightBlue[50],
       body: SafeArea(
         child: LayoutBuilder(
           builder: (context, constains) {
@@ -83,8 +112,31 @@ class _LogInScreenState extends State<LogInScreen> {
                   children: [
                     SizedBox(
                       width: screenSize.width,
-                      height: 280,
-                      child: Image.asset("MyAssets/imagess/login.jpg"),
+                      height: 350,
+                      child: RiveAnimation.asset(
+                        animationLink,
+                        fit: BoxFit.fill,
+                        stateMachines: ['Login Machine'],
+                        onInit: (artBoard) {
+                          stateMachineController =
+                              StateMachineController.fromArtboard(
+                                  artBoard, 'Login Machine');
+                          if (stateMachineController == null) {
+                            return;
+                          }
+                          artBoard.addController(stateMachineController!);
+                          isChecking =
+                              stateMachineController?.findInput('isChecking');
+                          isHandsUp =
+                              stateMachineController?.findInput('isHandsUp');
+                          trigSuccess =
+                              stateMachineController?.findInput('trigSuccess');
+                          trigFail =
+                              stateMachineController?.findInput('trigFail');
+                          numLook =
+                              stateMachineController?.findInput('numLock');
+                        },
+                      ),
                     ),
                     Padding(
                       padding: const EdgeInsets.all(16.0),
@@ -117,11 +169,53 @@ class _LogInScreenState extends State<LogInScreen> {
 
                                     // email
 
-                                    MyTextForm().myText(
-                                        emailController,
-                                        "Yours@gmail.com",
-                                        "Email can not be empty",
-                                        Icons.mail),
+                                    TextFormField(
+                                      onTap: lookOnTheTextField,
+                                      onChanged: moveEyeBalls,
+                                      controller: emailController,
+                                      validator: (value) {
+                                        if (value == null || value.isEmpty) {
+                                          return "Email can not be empty";
+                                        }
+                                        return null;
+                                      },
+                                      decoration: InputDecoration(
+                                        icon: Padding(
+                                          padding:
+                                              const EdgeInsets.only(left: 10),
+                                          child: Icon(
+                                            Icons.email,
+                                            color: Colors.black,
+                                          ),
+                                        ),
+                                        hintText: "Yours@gmail.com",
+                                        border: OutlineInputBorder(
+                                          borderRadius:
+                                              BorderRadius.circular(30),
+                                          borderSide: BorderSide(
+                                            color: Colors.white60,
+                                          ),
+                                        ),
+                                        focusedBorder: OutlineInputBorder(
+                                          borderRadius:
+                                              BorderRadius.circular(30),
+                                          borderSide: const BorderSide(
+                                              color: Colors.blue),
+                                        ),
+                                        errorBorder: OutlineInputBorder(
+                                          borderRadius:
+                                              BorderRadius.circular(8),
+                                          borderSide: const BorderSide(
+                                              color: Colors.red),
+                                        ),
+                                        contentPadding: EdgeInsets.symmetric(
+                                          horizontal: 14,
+                                          vertical: 6,
+                                        ),
+                                        fillColor: Colors.white,
+                                        filled: true,
+                                      ),
+                                    ),
 
                                     SizedBox(
                                       height: 10,
@@ -131,10 +225,19 @@ class _LogInScreenState extends State<LogInScreen> {
 
                                     Obx(
                                       () => TextFormField(
+                                        onChanged: (value) {
+                                          if (isChecking != null) {
+                                            isChecking!.change(false);
+                                          }
+                                          if (isHandsUp == null) {
+                                            return;
+                                          }
+                                          isHandsUp!.change(true);
+                                        },
                                         controller: passwordController,
                                         obscureText: isObsecure.value,
                                         validator: (value) {
-                                          if (value!.isEmpty) {
+                                          if (value == null || value.isEmpty) {
                                             return "password can not be empty";
                                           }
                                           return null;
@@ -210,7 +313,16 @@ class _LogInScreenState extends State<LogInScreen> {
                                         onPressed: () {
                                           if (formKey.currentState!
                                               .validate()) {
+                                            isChecking!.change(false);
+                                            isHandsUp!.change(false);
+                                            trigFail!.change(false);
+                                            trigSuccess!.change(true);
                                             loginUser();
+                                          } else {
+                                            isChecking!.change(false);
+                                            isHandsUp!.change(false);
+                                            trigSuccess!.change(false);
+                                            trigFail!.change(true);
                                           }
                                         },
                                       ),
