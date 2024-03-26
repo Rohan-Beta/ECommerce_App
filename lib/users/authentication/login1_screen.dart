@@ -13,7 +13,7 @@ import 'package:flutter/material.dart';
 import 'package:fluttertoast/fluttertoast.dart';
 import 'package:get/get.dart';
 import 'package:http/http.dart' as http;
-import 'package:rive/rive.dart';
+// import 'package:rive/rive.dart';
 
 class LogInScreen extends StatefulWidget {
   const LogInScreen({super.key});
@@ -31,12 +31,12 @@ class _LogInScreenState extends State<LogInScreen> {
 
   var isObsecure = true.obs;
 
-  var animationLink = "MyAssets/imagess/login.riv";
-  SMIInput<bool>? isChecking;
-  SMIInput<bool>? isHandsUp;
-  SMIInput<bool>? trigSuccess;
-  SMIInput<bool>? trigFail;
-  late StateMachineController? stateMachineController;
+  // var animationLink = "MyAssets/imagess/login.riv";
+  // SMIInput<bool>? isChecking;
+  // SMIInput<bool>? isHandsUp;
+  // SMIInput<bool>? trigSuccess;
+  // SMIInput<bool>? trigFail;
+  // late StateMachineController? stateMachineController;
 
   loginUser() async {
     try {
@@ -59,21 +59,21 @@ class _LogInScreenState extends State<LogInScreen> {
 
           await RememberUserPrefs.storeUserInfo(userInfo);
 
-          Future.delayed(Duration(seconds: 2), () {
-            isChecking!.change(false);
-            isHandsUp!.change(false);
-            trigFail!.change(false);
-            trigSuccess!.change(true);
+          Future.delayed(Duration(seconds: 1), () {
+            // isChecking!.change(false);
+            // isHandsUp!.change(false);
+            // trigFail!.change(false);
+            // trigSuccess!.change(true);
 
             nextScreenReplace(context, DashboardOfFragmentsScreen());
 
             // Get.to(DashboardOfFragmentsScreen());
           });
         } else {
-          isChecking!.change(false);
-          isHandsUp!.change(false);
-          trigSuccess!.change(false);
-          trigFail!.change(true);
+          // isChecking!.change(false);
+          // isHandsUp!.change(false);
+          // trigSuccess!.change(false);
+          // trigFail!.change(true);
 
           Fluttertoast.showToast(
               msg: "Please enter valid email or password , try again `-`");
@@ -86,8 +86,8 @@ class _LogInScreenState extends State<LogInScreen> {
   }
 
   void lookOnTheTextField() {
-    isHandsUp?.change(false);
-    isChecking?.change(true);
+    // isHandsUp?.change(false);
+    // isChecking?.change(true);
   }
 
   @override
@@ -105,31 +105,32 @@ class _LogInScreenState extends State<LogInScreen> {
                 child: Column(
                   children: [
                     SizedBox(
-                      width: screenSize.width,
-                      height: 350,
-                      child: RiveAnimation.asset(
-                        animationLink,
-                        fit: BoxFit.fill,
-                        stateMachines: ['Login Machine'],
-                        onInit: (artBoard) {
-                          stateMachineController =
-                              StateMachineController.fromArtboard(
-                                  artBoard, 'Login Machine');
-                          if (stateMachineController == null) {
-                            return;
-                          }
-                          artBoard.addController(stateMachineController!);
-                          isChecking =
-                              stateMachineController?.findInput('isChecking');
-                          isHandsUp =
-                              stateMachineController?.findInput('isHandsUp');
-                          trigSuccess =
-                              stateMachineController?.findInput('trigSuccess');
-                          trigFail =
-                              stateMachineController?.findInput('trigFail');
-                        },
-                      ),
-                    ),
+                        width: screenSize.width,
+                        height: 350,
+                        child: Image.asset("MyAssets/imagess/login.jpg")
+                        // RiveAnimation.asset(
+                        //   animationLink,
+                        //   fit: BoxFit.fill,
+                        //   stateMachines: ['Login Machine'],
+                        //   onInit: (artBoard) {
+                        //     stateMachineController =
+                        //         StateMachineController.fromArtboard(
+                        //             artBoard, 'Login Machine');
+                        //     if (stateMachineController == null) {
+                        //       return;
+                        //     }
+                        //     artBoard.addController(stateMachineController!);
+                        //     isChecking =
+                        //         stateMachineController?.findInput('isChecking');
+                        //     isHandsUp =
+                        //         stateMachineController?.findInput('isHandsUp');
+                        //     trigSuccess =
+                        //         stateMachineController?.findInput('trigSuccess');
+                        //     trigFail =
+                        //         stateMachineController?.findInput('trigFail');
+                        //   },
+                        // ),
+                        ),
                     Padding(
                       padding: const EdgeInsets.all(16.0),
                       child: Container(
@@ -217,15 +218,15 @@ class _LogInScreenState extends State<LogInScreen> {
 
                                     Obx(
                                       () => TextFormField(
-                                        onChanged: (value) {
-                                          if (isChecking != null) {
-                                            isChecking!.change(false);
-                                          }
-                                          if (isHandsUp == null) {
-                                            return;
-                                          }
-                                          isHandsUp!.change(true);
-                                        },
+                                        // onChanged: (value) {
+                                        //   if (isChecking != null) {
+                                        //     isChecking!.change(false);
+                                        //   }
+                                        //   if (isHandsUp == null) {
+                                        //     return;
+                                        //   }
+                                        //   isHandsUp!.change(true);
+                                        // },
                                         controller: passwordController,
                                         obscureText: isObsecure.value,
                                         validator: (value) {
@@ -305,16 +306,16 @@ class _LogInScreenState extends State<LogInScreen> {
                                         onPressed: () {
                                           if (formKey.currentState!
                                               .validate()) {
-                                            isChecking!.change(false);
-                                            isHandsUp!.change(false);
-                                            trigFail!.change(false);
-                                            trigSuccess!.change(true);
+                                            // isChecking!.change(false);
+                                            // isHandsUp!.change(false);
+                                            // trigFail!.change(false);
+                                            // trigSuccess!.change(true);
                                             loginUser();
                                           } else {
-                                            isChecking!.change(false);
-                                            isHandsUp!.change(false);
-                                            trigSuccess!.change(false);
-                                            trigFail!.change(true);
+                                            // isChecking!.change(false);
+                                            // isHandsUp!.change(false);
+                                            // trigSuccess!.change(false);
+                                            // trigFail!.change(true);
                                           }
                                         },
                                       ),
