@@ -1,11 +1,10 @@
 // ignore_for_file: prefer_const_constructors
 
 import 'package:ecommerce/users/authentication/login_screen.dart';
-import 'package:ecommerce/users/fragments_screen/dashboard_of_fragments_screen.dart';
+import 'package:ecommerce/users/screen/dashboard_screen.dart';
 import 'package:ecommerce/users/userSharedPreferences/user_shared_preferences.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
-import 'package:rive/rive.dart';
 
 void main() {
   WidgetsFlutterBinding.ensureInitialized();

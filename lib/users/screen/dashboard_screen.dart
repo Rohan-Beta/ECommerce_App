@@ -1,9 +1,9 @@
 // ignore_for_file: prefer_const_constructors, must_be_immutable, prefer_final_fields
 
-import 'package:ecommerce/users/fragments_screen/favorites_fragments_screen.dart';
-import 'package:ecommerce/users/fragments_screen/home_fragment_screen.dart';
-import 'package:ecommerce/users/fragments_screen/order_fragment_screen.dart';
-import 'package:ecommerce/users/fragments_screen/profile_fragment_screen.dart';
+import 'package:ecommerce/users/screen/favorites_screen.dart';
+import 'package:ecommerce/users/screen/home_screen.dart';
+import 'package:ecommerce/users/screen/order_user_screen.dart';
+import 'package:ecommerce/users/screen/profile_user_screen.dart';
 import 'package:ecommerce/users/userSharedPreferences/current_user.dart';
 import 'package:flutter/material.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';

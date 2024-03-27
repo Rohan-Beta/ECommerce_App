@@ -4,7 +4,7 @@ import 'dart:convert';
 
 import 'package:ecommerce/api_connection/api_connection.dart';
 import 'package:ecommerce/users/authentication/sign_in_screen.dart';
-import 'package:ecommerce/users/fragments_screen/dashboard_of_fragments_screen.dart';
+import 'package:ecommerce/users/screen/dashboard_screen.dart';
 import 'package:ecommerce/users/modell/user_model.dart';
 import 'package:ecommerce/users/userSharedPreferences/user_shared_preferences.dart';
 import 'package:ecommerce/utilss/next_screen.dart';
