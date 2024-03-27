@@ -65,7 +65,7 @@ class _LogInScreenState extends State<LogInScreen> {
             trigFail!.change(false);
             trigSuccess!.change(true);
 
-            nextScreenReplace(context, DashboardOfFragmentsScreen());
+            nextScreenReplace(context, DashboardScreen());
 
             // Get.to(DashboardOfFragmentsScreen());
           });

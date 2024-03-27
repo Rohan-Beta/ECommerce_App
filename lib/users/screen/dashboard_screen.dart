@@ -9,16 +9,16 @@ import 'package:flutter/material.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:get/get.dart';
 
-class DashboardOfFragmentsScreen extends StatelessWidget {
-  DashboardOfFragmentsScreen({super.key});
+class DashboardScreen extends StatelessWidget {
+  DashboardScreen({super.key});
 
   CurrentUser _rememberCurrentUser = Get.put(CurrentUser());
 
   List<Widget> _fragmentScreens = [
-    HomeFragementScreen(),
+    HomeScreen(),
     FavoritesScreen(),
-    OrderFragmentScreen(),
-    ProfileFragmentScreen(),
+    OrderUserScreen(),
+    ProfilUserScreen(),
   ];
 
   List _navigationButtons = [

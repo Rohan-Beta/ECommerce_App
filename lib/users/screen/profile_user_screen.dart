@@ -6,8 +6,8 @@ import 'package:ecommerce/users/userSharedPreferences/user_shared_preferences.da
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 
-class ProfileFragmentScreen extends StatelessWidget {
-  ProfileFragmentScreen({super.key});
+class ProfilUserScreen extends StatelessWidget {
+  ProfilUserScreen({super.key});
 
   final CurrentUser _currentUser = Get.put(CurrentUser());
 

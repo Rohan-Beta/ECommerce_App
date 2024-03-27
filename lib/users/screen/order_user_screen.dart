@@ -2,8 +2,8 @@
 
 import 'package:flutter/material.dart';
 
-class OrderFragmentScreen extends StatelessWidget {
-  const OrderFragmentScreen({super.key});
+class OrderUserScreen extends StatelessWidget {
+  const OrderUserScreen({super.key});
 
   @override
   Widget build(BuildContext context) {

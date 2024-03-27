@@ -35,7 +35,7 @@ class MyApp extends StatelessWidget {
               if (snapshot.data == null) {
                 return LogInScreen();
               } else {
-                return DashboardOfFragmentsScreen();
+                return DashboardScreen();
               }
             },
           ),
