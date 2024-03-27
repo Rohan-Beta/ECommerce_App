@@ -2,12 +2,8 @@
 
 import 'dart:convert';
 
-import 'package:ecommerce/admins/login_admin.dart';
+import 'package:ecommerce/admins/admin_upload_items.dart';
 import 'package:ecommerce/api_connection/api_connection.dart';
-import 'package:ecommerce/users/authentication/sign_in_screen.dart';
-import 'package:ecommerce/users/screen/dashboard_screen.dart';
-import 'package:ecommerce/users/modell/user_model.dart';
-import 'package:ecommerce/users/userSharedPreferences/user_shared_preferences.dart';
 import 'package:ecommerce/utilss/next_screen.dart';
 import 'package:ecommerce/utilss/screen_size.dart';
 import 'package:flutter/material.dart';
@@ -16,14 +12,14 @@ import 'package:get/get.dart';
 import 'package:http/http.dart' as http;
 import 'package:rive/rive.dart';
 
-class LogInScreen extends StatefulWidget {
-  const LogInScreen({super.key});
+class LogInAdminScreen extends StatefulWidget {
+  const LogInAdminScreen({super.key});
 
   @override
-  State<LogInScreen> createState() => _LogInScreenState();
+  State<LogInAdminScreen> createState() => _LogInScreenState();
 }
 
-class _LogInScreenState extends State<LogInScreen> {
+class _LogInScreenState extends State<LogInAdminScreen> {
   Size screenSize = MyScreenSize().getScreenSize();
   var formKey = GlobalKey<FormState>();
 
@@ -39,7 +35,7 @@ class _LogInScreenState extends State<LogInScreen> {
   SMIInput<bool>? trigFail;
   late StateMachineController? stateMachineController;
 
-  loginUser() async {
+  loginAdmin() async {
     try {
       var res = await http.post(
         Uri.parse(API.login),
@@ -54,19 +50,13 @@ class _LogInScreenState extends State<LogInScreen> {
         if (resBodyOfLogIn['success'] == true) {
           Fluttertoast.showToast(msg: "LogIn Successfully ^-^");
 
-          UserModel userInfo = UserModel.fromJson(resBodyOfLogIn["userData"]);
-
-          // save user data to local storage
-
-          await RememberUserPrefs.storeUserInfo(userInfo);
-
           Future.delayed(Duration(seconds: 2), () {
             isChecking!.change(false);
             isHandsUp!.change(false);
             trigFail!.change(false);
             trigSuccess!.change(true);
 
-            nextScreenReplace(context, DashboardScreen());
+            nextScreenReplace(context, AdminUploadItemsScreen());
 
             // Get.to(DashboardOfFragmentsScreen());
           });
@@ -94,7 +84,18 @@ class _LogInScreenState extends State<LogInScreen> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      // backgroundColor: Colors.lightBlue[50],
+      appBar: AppBar(
+        backgroundColor: Colors.lightBlue[50],
+        title: Text("Admin Login"),
+        centerTitle: true,
+        leading: IconButton(
+          onPressed: () {
+            Navigator.pop(context);
+          },
+          icon: Icon(Icons.arrow_back_ios),
+        ),
+      ),
+      backgroundColor: Colors.lightBlue[50],
       body: SafeArea(
         child: LayoutBuilder(
           builder: (context, constains) {
@@ -310,7 +311,7 @@ class _LogInScreenState extends State<LogInScreen> {
                                             isHandsUp!.change(false);
                                             trigFail!.change(false);
                                             trigSuccess!.change(true);
-                                            loginUser();
+                                            loginAdmin();
                                           } else {
                                             isChecking!.change(false);
                                             isHandsUp!.change(false);
@@ -320,82 +321,8 @@ class _LogInScreenState extends State<LogInScreen> {
                                         },
                                       ),
                                     ),
-                                  ],
-                                ),
-                              ),
-                              // sign in user
-
-                              Padding(
-                                padding:
-                                    const EdgeInsets.only(top: 16, bottom: 8),
-                                child: Row(
-                                  mainAxisAlignment: MainAxisAlignment.center,
-                                  children: [
-                                    Text(
-                                      "Don't have an account?",
-                                      style: TextStyle(
-                                          color: Colors.black,
-                                          fontWeight: FontWeight.bold),
-                                    ),
-                                    TextButton(
-                                      onPressed: () {
-                                        nextScreen(context, SignInScreen());
-                                      },
-                                      child: Text(
-                                        "SignUp Here",
-                                        style: TextStyle(
-                                            color: Colors.black, fontSize: 16),
-                                      ),
-                                    ),
-                                  ],
-                                ),
-                              ),
-                              Row(
-                                children: [
-                                  Expanded(
-                                    child: Container(
-                                      height: 1,
-                                      color: Colors.grey,
-                                    ),
-                                  ),
-                                  const Padding(
-                                    padding:
-                                        EdgeInsets.symmetric(horizontal: 10),
-                                    child: Text(
-                                      "OR",
-                                      style: TextStyle(color: Colors.grey),
-                                    ),
-                                  ),
-                                  Expanded(
-                                    child: Container(
-                                      height: 1,
-                                      color: Colors.grey,
-                                    ),
-                                  ),
-                                ],
-                              ),
-                              // admin login
-
-                              Padding(
-                                padding: const EdgeInsets.only(top: 10),
-                                child: Row(
-                                  mainAxisAlignment: MainAxisAlignment.center,
-                                  children: [
-                                    Text(
-                                      "Are you an Admin?",
-                                      style: TextStyle(
-                                          color: Colors.black,
-                                          fontWeight: FontWeight.bold),
-                                    ),
-                                    TextButton(
-                                      onPressed: () {
-                                        nextScreen(context, LogInAdminScreen());
-                                      },
-                                      child: Text(
-                                        "Click Here",
-                                        style: TextStyle(
-                                            color: Colors.black, fontSize: 16),
-                                      ),
+                                    SizedBox(
+                                      height: 20,
                                     ),
                                   ],
                                 ),

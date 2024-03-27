@@ -1,4 +1,4 @@
-// ignore_for_file: prefer_const_constructors, prefer_const_literals_to_create_immutables, empty_catches, non_constant_identifier_names, avoid_print
+// ignore_for_file: prefer_const_constructors, prefer_const_literals_to_create_immutables, empty_catches, non_constant_identifier_names, avoid_print, use_build_context_synchronously
 
 import 'dart:convert';
 
@@ -49,6 +49,7 @@ class _SignInScreenState extends State<SignInScreen> {
         } else {
           // register and save new user record to db
           registerAndSaveUserRecord();
+          Navigator.pop(context);
         }
       }
     } catch (e) {
