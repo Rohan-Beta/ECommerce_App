@@ -4,6 +4,7 @@ import 'dart:convert';
 
 import 'package:ecommerce/api_connection/api_connection.dart';
 import 'package:ecommerce/users/modell/user_model.dart';
+import 'package:ecommerce/utilss/onhHover.dart';
 import 'package:ecommerce/utilss/screen_size.dart';
 import 'package:ecommerce/utilss/text_form_format.dart';
 import 'package:flutter/material.dart';
@@ -296,7 +297,30 @@ class _SignInScreenState extends State<SignInScreen> {
                           child: SizedBox(
                             height: 35,
                             width: 100,
-                            child: ElevatedButton(
+                            child:
+                                // moving button for web
+
+                                // OnHover(
+                                //   builder: (isHovered) {
+                                //     return ElevatedButton(
+                                //       style: ElevatedButton.styleFrom(
+                                //           backgroundColor: Colors.white24),
+                                //       child: const Text(
+                                //         "SignIn",
+                                //         style: TextStyle(color: Colors.white),
+                                //       ),
+                                //       onPressed: () {
+                                //         print("click");
+                                //         if (formKey.currentState!.validate() &&
+                                //             formKey1.currentState!.validate() &&
+                                //             formKey2.currentState!.validate()) {
+                                //           validateUserEmail();
+                                //         }
+                                //       },
+                                //     );
+                                //   },
+                                // ),
+                                ElevatedButton(
                               style: ElevatedButton.styleFrom(
                                   backgroundColor: Colors.white24),
                               child: const Text(
