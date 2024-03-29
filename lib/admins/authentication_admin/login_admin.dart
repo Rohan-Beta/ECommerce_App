@@ -2,7 +2,7 @@
 
 import 'dart:convert';
 
-import 'package:ecommerce/admins/admin_upload_items.dart';
+import 'package:ecommerce/admins/screen_admin/admin_upload_items.dart';
 import 'package:ecommerce/admins/authentication_admin/signin_admin.dart';
 import 'package:ecommerce/api_connection/api_connection.dart';
 import 'package:ecommerce/utilss/next_screen.dart';

@@ -1,5 +1,6 @@
 // ignore_for_file: prefer_const_constructors
 
+import 'package:ecommerce/admins/screen_admin/admin_upload_items.dart';
 import 'package:ecommerce/users/authentication/login_screen.dart';
 import 'package:ecommerce/users/screen/dashboard_screen.dart';
 import 'package:ecommerce/users/userSharedPreferences/user_shared_preferences.dart';
@@ -33,7 +34,8 @@ class MyApp extends StatelessWidget {
             future: RememberUserPrefs.readUserInfo(),
             builder: (context, snapshot) {
               if (snapshot.data == null) {
-                return LogInScreen();
+                // return LogInScreen();
+                return AdminUploadItemsScreen();
               } else {
                 return DashboardScreen();
               }
