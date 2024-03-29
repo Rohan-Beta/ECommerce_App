@@ -3,7 +3,7 @@
 import 'dart:convert';
 
 import 'package:ecommerce/api_connection/api_connection.dart';
-import 'package:ecommerce/users/modell/user_model.dart';
+import 'package:ecommerce/modell/user_model.dart';
 import 'package:ecommerce/utilss/screen_size.dart';
 import 'package:ecommerce/utilss/text_form_format.dart';
 import 'package:flutter/material.dart';

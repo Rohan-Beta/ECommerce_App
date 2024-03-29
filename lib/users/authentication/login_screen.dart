@@ -6,7 +6,7 @@ import 'package:ecommerce/admins/login_admin.dart';
 import 'package:ecommerce/api_connection/api_connection.dart';
 import 'package:ecommerce/users/authentication/sign_in_screen.dart';
 import 'package:ecommerce/users/screen/dashboard_screen.dart';
-import 'package:ecommerce/users/modell/user_model.dart';
+import 'package:ecommerce/modell/user_model.dart';
 import 'package:ecommerce/users/userSharedPreferences/user_shared_preferences.dart';
 import 'package:ecommerce/utilss/next_screen.dart';
 import 'package:ecommerce/utilss/screen_size.dart';

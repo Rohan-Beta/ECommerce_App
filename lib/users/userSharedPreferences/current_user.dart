@@ -1,6 +1,6 @@
 // ignore_for_file: prefer_final_fields
 
-import 'package:ecommerce/users/modell/user_model.dart';
+import 'package:ecommerce/modell/user_model.dart';
 import 'package:ecommerce/users/userSharedPreferences/user_shared_preferences.dart';
 import 'package:get/get.dart';
 
