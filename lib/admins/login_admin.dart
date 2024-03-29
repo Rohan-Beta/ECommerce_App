@@ -3,6 +3,7 @@
 import 'dart:convert';
 
 import 'package:ecommerce/admins/admin_upload_items.dart';
+import 'package:ecommerce/admins/signin_admin.dart';
 import 'package:ecommerce/api_connection/api_connection.dart';
 import 'package:ecommerce/utilss/next_screen.dart';
 import 'package:ecommerce/utilss/screen_size.dart';
@@ -38,10 +39,10 @@ class _LogInScreenState extends State<LogInAdminScreen> {
   loginAdmin() async {
     try {
       var res = await http.post(
-        Uri.parse(API.login),
+        Uri.parse(API.adminLogin),
         body: {
-          "user_email": emailController.text.trim(),
-          "user_password": passwordController.text.trim(),
+          "admin_email": emailController.text.trim(),
+          "admin_password": passwordController.text.trim(),
         },
       );
       if (res.statusCode == 200) {
@@ -321,8 +322,33 @@ class _LogInScreenState extends State<LogInAdminScreen> {
                                         },
                                       ),
                                     ),
-                                    SizedBox(
-                                      height: 20,
+                                    Padding(
+                                      padding: const EdgeInsets.only(
+                                          top: 16, bottom: 8),
+                                      child: Row(
+                                        mainAxisAlignment:
+                                            MainAxisAlignment.center,
+                                        children: [
+                                          Text(
+                                            "Don't have an account?",
+                                            style: TextStyle(
+                                                color: Colors.black,
+                                                fontWeight: FontWeight.bold),
+                                          ),
+                                          TextButton(
+                                            onPressed: () {
+                                              nextScreen(
+                                                  context, SignInAdminScreen());
+                                            },
+                                            child: Text(
+                                              "SignUp Here",
+                                              style: TextStyle(
+                                                  color: Colors.black,
+                                                  fontSize: 16),
+                                            ),
+                                          ),
+                                        ],
+                                      ),
                                     ),
                                   ],
                                 ),

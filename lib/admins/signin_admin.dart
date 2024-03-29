@@ -1,9 +1,9 @@
-// ignore_for_file: prefer_const_constructors, prefer_const_literals_to_create_immutables, empty_catches, non_constant_identifier_names, avoid_print, use_build_context_synchronously
+// ignore_for_file: use_build_context_synchronously, avoid_print, non_constant_identifier_names, prefer_const_constructors, prefer_const_literals_to_create_immutables
 
 import 'dart:convert';
 
 import 'package:ecommerce/api_connection/api_connection.dart';
-import 'package:ecommerce/users/modell/user_model.dart';
+import 'package:ecommerce/users/modell/admin_model.dart';
 import 'package:ecommerce/utilss/screen_size.dart';
 import 'package:ecommerce/utilss/text_form_format.dart';
 import 'package:flutter/material.dart';
@@ -11,14 +11,14 @@ import 'package:fluttertoast/fluttertoast.dart';
 import 'package:get/get.dart';
 import 'package:http/http.dart' as http;
 
-class SignInScreen extends StatefulWidget {
-  const SignInScreen({super.key});
+class SignInAdminScreen extends StatefulWidget {
+  const SignInAdminScreen({super.key});
 
   @override
-  State<SignInScreen> createState() => _SignInScreenState();
+  State<SignInAdminScreen> createState() => _SignInAdminScreenState();
 }
 
-class _SignInScreenState extends State<SignInScreen> {
+class _SignInAdminScreenState extends State<SignInAdminScreen> {
   Size screenSize = MyScreenSize().getScreenSize();
   var formKey = GlobalKey<FormState>();
   var formKey1 = GlobalKey<FormState>();
@@ -30,12 +30,12 @@ class _SignInScreenState extends State<SignInScreen> {
 
   var isObsecure = true.obs;
 
-  validateUserEmail() async {
+  validateAdminEmail() async {
     try {
       var res = await http.post(
-        Uri.parse(API.validateEmail),
+        Uri.parse(API.adminValidateEmail),
         body: {
-          'user_email': emailController.text.trim(),
+          'admin_email': emailController.text.trim(),
         },
       );
       if (res.statusCode == 200) {
@@ -48,7 +48,7 @@ class _SignInScreenState extends State<SignInScreen> {
               msg: "Email already exists. Try another email 'o'");
         } else {
           // register and save new user record to db
-          registerAndSaveUserRecord();
+          registerAndSaveAdminRecord();
           Navigator.pop(context);
         }
       }
@@ -58,17 +58,17 @@ class _SignInScreenState extends State<SignInScreen> {
     }
   }
 
-  registerAndSaveUserRecord() async {
-    UserModel user_model = UserModel(
-      user_id: 1,
-      user_name: nameController.text.trim(),
-      user_email: emailController.text.trim(),
-      user_password: passwordController.text.trim(),
+  registerAndSaveAdminRecord() async {
+    AdminModel admin_model = AdminModel(
+      admin_id: 1,
+      admin_name: nameController.text.trim(),
+      admin_email: emailController.text.trim(),
+      admin_password: passwordController.text.trim(),
     );
     try {
       var res = await http.post(
-        Uri.parse(API.signUp),
-        body: user_model.toJson(),
+        Uri.parse(API.adminSignUp),
+        body: admin_model.toJson(),
       );
       if (res.statusCode == 200) {
         var resBodyOfSingIn = jsonDecode(res.body);
@@ -121,7 +121,7 @@ class _SignInScreenState extends State<SignInScreen> {
                     SizedBox(
                       width: screenSize.width,
                       height: 280,
-                      child: Image.asset("MyAssets/imagess/register.jpg"),
+                      child: Image.asset("MyAssets/imagess/login.jpg"),
                     ),
                     SizedBox(
                       height: 10,
@@ -296,30 +296,7 @@ class _SignInScreenState extends State<SignInScreen> {
                           child: SizedBox(
                             height: 35,
                             width: 100,
-                            child:
-                                // moving button for web
-
-                                // OnHover(
-                                //   builder: (isHovered) {
-                                //     return ElevatedButton(
-                                //       style: ElevatedButton.styleFrom(
-                                //           backgroundColor: Colors.white24),
-                                //       child: const Text(
-                                //         "SignIn",
-                                //         style: TextStyle(color: Colors.white),
-                                //       ),
-                                //       onPressed: () {
-                                //         print("click");
-                                //         if (formKey.currentState!.validate() &&
-                                //             formKey1.currentState!.validate() &&
-                                //             formKey2.currentState!.validate()) {
-                                //           validateUserEmail();
-                                //         }
-                                //       },
-                                //     );
-                                //   },
-                                // ),
-                                ElevatedButton(
+                            child: ElevatedButton(
                               style: ElevatedButton.styleFrom(
                                   backgroundColor: Colors.white24),
                               child: const Text(
@@ -330,7 +307,7 @@ class _SignInScreenState extends State<SignInScreen> {
                                 if (formKey.currentState!.validate() &&
                                     formKey1.currentState!.validate() &&
                                     formKey2.currentState!.validate()) {
-                                  validateUserEmail();
+                                  validateAdminEmail();
                                 }
                               },
                             ),
@@ -352,7 +329,7 @@ class _SignInScreenState extends State<SignInScreen> {
                           const Padding(
                             padding: EdgeInsets.symmetric(horizontal: 10),
                             child: Text(
-                              "New User",
+                              "New Admin",
                               style: TextStyle(color: Colors.grey),
                             ),
                           ),
