@@ -1,5 +1,8 @@
 // ignore_for_file: prefer_const_constructors, prefer_const_literals_to_create_immutables, use_build_context_synchronously
 
+import 'package:ecommerce/admins/authentication_admin/login_admin.dart';
+import 'package:ecommerce/admins/screen_admin/upload_item_desc_admin.dart';
+import 'package:ecommerce/utilss/next_screen.dart';
 import 'package:flutter/material.dart';
 import 'package:image_picker/image_picker.dart';
 
@@ -18,12 +21,16 @@ class _AdminUploadItemsState extends State<AdminUploadItemsScreen> {
     pickedImageXFile = await _picker.pickImage(source: ImageSource.camera);
 
     Navigator.pop(context);
+
+    setState(() => pickedImageXFile);
   }
 
   captureImageFromPhoneGallery() async {
     pickedImageXFile = await _picker.pickImage(source: ImageSource.gallery);
 
     Navigator.pop(context);
+
+    setState(() => pickedImageXFile);
   }
 
   dialogBoxForImagePickingOrCapturing() {
@@ -79,67 +86,78 @@ class _AdminUploadItemsState extends State<AdminUploadItemsScreen> {
 
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
-      appBar: AppBar(
-        flexibleSpace: Container(
-          decoration: BoxDecoration(
-            gradient: LinearGradient(
-              colors: [
-                Colors.black87,
-                Colors.deepPurple,
-              ],
-            ),
-          ),
-        ),
-        title: Text(
-          "Welcome Admin",
-          style: TextStyle(color: Colors.white),
-        ),
-        centerTitle: true,
-      ),
-      body: SafeArea(
-        child: Container(
-          decoration: BoxDecoration(
-            gradient: LinearGradient(
-              colors: [
-                Colors.black54,
-                Colors.deepPurple,
-              ],
-            ),
-          ),
-          child: Center(
-            child: Column(
-              mainAxisAlignment: MainAxisAlignment.center,
-              children: [
-                Icon(
-                  Icons.add_photo_alternate,
-                  color: Colors.white54,
-                  size: 200,
+    return pickedImageXFile == null
+        ? Scaffold(
+            appBar: AppBar(
+              flexibleSpace: Container(
+                decoration: BoxDecoration(
+                  gradient: LinearGradient(
+                    colors: [
+                      Colors.black87,
+                      Colors.deepPurple,
+                    ],
+                  ),
                 ),
-                Column(
-                  children: [
-                    SizedBox(
-                      height: 35,
-                      width: 145,
-                      child: ElevatedButton(
-                        style: ElevatedButton.styleFrom(
-                            backgroundColor: Colors.black38),
-                        child: const Text(
-                          "Add New Item",
-                          style: TextStyle(color: Colors.white),
-                        ),
-                        onPressed: () {
-                          dialogBoxForImagePickingOrCapturing();
-                        },
+              ),
+              title: Text(
+                "Welcome Admin",
+                style: TextStyle(color: Colors.white),
+              ),
+              centerTitle: true,
+              leading: IconButton(
+                onPressed: () {
+                  nextScreenReplace(context, LogInAdminScreen());
+                },
+                icon: Icon(
+                  Icons.clear,
+                  color: Colors.white,
+                ),
+              ),
+            ),
+            body: SafeArea(
+              child: Container(
+                decoration: BoxDecoration(
+                  gradient: LinearGradient(
+                    colors: [
+                      Colors.black54,
+                      Colors.deepPurple,
+                    ],
+                  ),
+                ),
+                child: Center(
+                  child: Column(
+                    mainAxisAlignment: MainAxisAlignment.center,
+                    children: [
+                      Icon(
+                        Icons.add_photo_alternate,
+                        color: Colors.white54,
+                        size: 200,
                       ),
-                    ),
-                  ],
+                      Column(
+                        children: [
+                          SizedBox(
+                            height: 35,
+                            width: 145,
+                            child: ElevatedButton(
+                              style: ElevatedButton.styleFrom(
+                                  backgroundColor: Colors.black38),
+                              child: const Text(
+                                "Add New Item",
+                                style: TextStyle(color: Colors.white),
+                              ),
+                              onPressed: () {
+                                dialogBoxForImagePickingOrCapturing();
+                              },
+                            ),
+                          ),
+                        ],
+                      ),
+                    ],
+                  ),
                 ),
-              ],
+              ),
             ),
-          ),
-        ),
-      ),
-    );
+          )
+        : UploadItemDescAdmin(pickedImageXFile: pickedImageXFile);
   }
 }
