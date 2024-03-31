@@ -1,20 +1,24 @@
-// ignore_for_file: prefer_const_constructors, prefer_const_literals_to_create_immutables
+// ignore_for_file: prefer_const_constructors, prefer_const_literals_to_create_immutables, prefer_adjacent_string_concatenation, avoid_print, use_build_context_synchronously, must_be_immutable, unused_local_variable
 
+import 'dart:convert';
 import 'dart:io';
 
 import 'package:ecommerce/admins/authentication_admin/login_admin.dart';
 import 'package:ecommerce/admins/screen_admin/admin_upload_items.dart';
+import 'package:ecommerce/api_connection/api_connection.dart';
 import 'package:ecommerce/utilss/next_screen.dart';
 import 'package:ecommerce/utilss/screen_size.dart';
 import 'package:ecommerce/utilss/text_form_format.dart';
 import 'package:flutter/material.dart';
 import 'package:fluttertoast/fluttertoast.dart';
+import 'package:get/get.dart';
 import 'package:image_picker/image_picker.dart';
+import 'package:http/http.dart' as http;
 
 class UploadItemDescAdmin extends StatefulWidget {
-  final XFile? pickedImageXFile;
+  XFile? pickedImageXFile;
 
-  const UploadItemDescAdmin({super.key, required this.pickedImageXFile});
+  UploadItemDescAdmin({super.key, required this.pickedImageXFile});
 
   @override
   State<UploadItemDescAdmin> createState() => _UploadItemDescAdminState();
@@ -31,6 +35,86 @@ class _UploadItemDescAdminState extends State<UploadItemDescAdmin> {
   TextEditingController colorsController = TextEditingController();
   TextEditingController descriptionController = TextEditingController();
   var imageLink = "";
+
+  // upload image with the help of imgur api
+
+  uploadItemImage() async {
+    var requestImgurAPi = http.MultipartRequest(
+      "POST",
+      Uri.parse("https://api.imgur.com/3/image"),
+    );
+    String imageName = DateTime.now().millisecondsSinceEpoch.toString();
+    requestImgurAPi.fields['title'] = imageName;
+    requestImgurAPi.headers['Authorization'] = "Client-ID " + "75aa8addad51fd6";
+
+    var imageFile = await http.MultipartFile.fromPath(
+      'image',
+      widget.pickedImageXFile!.path,
+      filename: imageName,
+    );
+    requestImgurAPi.files.add(imageFile);
+    var responseFromImgurApi = await requestImgurAPi.send();
+
+    var responseDataFromImgurApi = await responseFromImgurApi.stream.toBytes();
+
+    var resultFromImgurApi = String.fromCharCodes(responseDataFromImgurApi);
+
+    // print("Result ::");
+    // print(resultFromImgurApi);
+
+    Map<String, dynamic> jsonRes = json.decode(resultFromImgurApi);
+
+    imageLink = (jsonRes["data"]["link"]).toString();
+    String deleteHash = (jsonRes["data"]["deletehash"]).toString();
+
+    saveItemInfoToDB();
+  }
+
+  saveItemInfoToDB() async {
+    List<String> tagsList = tagsController.text.split(',');
+    List<String> sizesList = sizesController.text.split(',');
+    List<String> colorsList = colorsController.text.split(',');
+
+    try {
+      var res = await http.post(
+        Uri.parse(API.uploadNewItem),
+        body: {
+          'item_id': '1',
+          'item_name': nameController.text.trim().toString(),
+          'item_rating': ratingController.text.trim().toString(),
+          'item_tags': tagsList.toString(),
+          'item_price': priceController.text.trim().toString(),
+          'item_sizes': sizesList.toString(),
+          'item_colors': colorsList.toString(),
+          'item_description': descriptionController.text.trim().toString(),
+          'item_image': imageLink.toString(),
+        },
+      );
+      if (res.statusCode == 200) {
+        var resBodyOfUploadItem = jsonDecode(res.body);
+
+        if (resBodyOfUploadItem['success'] == true) {
+          Fluttertoast.showToast(msg: "New item uploaded successfully ^-^");
+          // nextScreenReplace(context, LogInAdminScreen());
+          setState(() {
+            widget.pickedImageXFile = null;
+            nameController.clear();
+            ratingController.clear();
+            tagsController.clear();
+            priceController.clear();
+            sizesController.clear();
+            colorsController.clear();
+            descriptionController.clear();
+          });
+          Get.to(AdminUploadItemsScreen());
+        } else {
+          Fluttertoast.showToast(msg: "Item not uploaded , Error ~");
+        }
+      }
+    } catch (e) {
+      print(e.toString());
+    }
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -56,6 +140,7 @@ class _UploadItemDescAdminState extends State<UploadItemDescAdmin> {
         centerTitle: true,
         leading: IconButton(
           onPressed: () {
+            setState(() => widget.pickedImageXFile = null);
             nextScreenReplace(context, LogInAdminScreen());
           },
           icon: Icon(
@@ -68,6 +153,7 @@ class _UploadItemDescAdminState extends State<UploadItemDescAdmin> {
         actions: [
           TextButton(
             onPressed: () {
+              setState(() => widget.pickedImageXFile = null);
               nextScreenReplace(context, AdminUploadItemsScreen());
             },
             child: Text(
@@ -185,9 +271,8 @@ class _UploadItemDescAdminState extends State<UploadItemDescAdmin> {
                             ),
                             onPressed: () {
                               if (formKey.currentState!.validate()) {
-                                nextScreenReplace(context, LogInAdminScreen());
-                                Fluttertoast.showToast(
-                                    msg: "Product Uploaded Successfully");
+                                Fluttertoast.showToast(msg: "Uploading...");
+                                uploadItemImage();
                               }
                             },
                           ),

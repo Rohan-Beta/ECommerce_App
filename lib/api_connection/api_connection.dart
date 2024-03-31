@@ -1,7 +1,9 @@
 class API {
+  // api connection with server
   static const hostConnect = "http://192.168.0.7/api_ecommerce";
   static const hostConnectUser = "$hostConnect/user";
   static const hostConnectAdmin = "$hostConnect/admin";
+  static const hostUploadtItem = "$hostConnect/items";
 
   // signIn and logIn user
   static const validateEmail = "$hostConnectUser/validate_email.php";
@@ -12,6 +14,9 @@ class API {
   static const adminValidateEmail = "$hostConnectAdmin/validate_email.php";
   static const adminSignUp = "$hostConnectAdmin/signup.php";
   static const adminLogin = "$hostConnectAdmin/login.php";
+
+  // upload and save items info
+  static const uploadNewItem = "$hostUploadtItem/upload_items.php";
 }
 
 // static const hostConnect = "http://ipaddress/file name in htdocs";
