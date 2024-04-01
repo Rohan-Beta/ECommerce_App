@@ -14,7 +14,7 @@ class DashboardScreen extends StatelessWidget {
 
   CurrentUser _rememberCurrentUser = Get.put(CurrentUser());
 
-  List<Widget> _fragmentScreens = [
+  final List<Widget> _fragmentScreens = [
     HomeScreen(),
     FavoritesScreen(),
     OrderUserScreen(),
@@ -44,7 +44,7 @@ class DashboardScreen extends StatelessWidget {
     },
   ];
 
-  RxInt _indexNumber = 0.obs;
+  final RxInt _indexNumber = 0.obs;
 
   @override
   Widget build(BuildContext context) {

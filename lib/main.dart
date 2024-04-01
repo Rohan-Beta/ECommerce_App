@@ -34,8 +34,9 @@ class MyApp extends StatelessWidget {
             future: RememberUserPrefs.readUserInfo(),
             builder: (context, snapshot) {
               if (snapshot.data == null) {
-                return LogInScreen();
+                // return LogInScreen();
                 // return AdminUploadItemsScreen();
+                return DashboardScreen();
               } else {
                 return DashboardScreen();
               }
