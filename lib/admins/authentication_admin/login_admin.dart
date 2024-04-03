@@ -308,10 +308,10 @@ class _LogInScreenState extends State<LogInAdminScreen> {
                                         onPressed: () {
                                           if (formKey.currentState!
                                               .validate()) {
-                                            // isChecking!.change(false);
-                                            // isHandsUp!.change(false);
-                                            // trigFail!.change(false);
-                                            // trigSuccess!.change(true);
+                                            isChecking!.change(false);
+                                            isHandsUp!.change(false);
+                                            trigFail!.change(false);
+                                            trigSuccess!.change(true);
                                             loginAdmin();
                                           } else {
                                             isChecking!.change(false);

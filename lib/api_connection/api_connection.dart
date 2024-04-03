@@ -21,6 +21,7 @@ class API {
 
   // clothes
   static const trendingClothes = "$hostCloth/trending.php";
+  static const allClothes = "$hostCloth/all_items.php";
 }
 
 // static const hostConnect = "http://ipaddress/file name in htdocs";
