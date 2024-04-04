@@ -100,8 +100,7 @@ class TrendingItems {
                                   ),
                                   SizedBox(height: 10),
                                   Text(
-                                    eachItemData.item_price
-                                        .toString(), // item price
+                                    "₹${eachItemData.item_price}", // item price
                                     style: TextStyle(
                                       color: Colors.purpleAccent,
                                       fontSize: 16,
