@@ -31,4 +31,27 @@ class ClothItems {
     }
     return trendingClothItems;
   }
+
+  Future<List<ClothesModel>> getAllClothes() async {
+    List<ClothesModel> allClothItems = [];
+
+    try {
+      var res = await http.post(
+        Uri.parse(API.allClothes),
+      );
+      if (res.statusCode == 200) {
+        var resBodyOfAllItems = jsonDecode(res.body);
+
+        if (resBodyOfAllItems["success"] == true) {
+          (resBodyOfAllItems["clothItemsData"] as List).forEach((eachRecord) {
+            allClothItems.add(ClothesModel.fromJson(eachRecord));
+          });
+        }
+      }
+    } catch (e) {
+      print(e.toString());
+      Fluttertoast.showToast(msg: e.toString());
+    }
+    return allClothItems;
+  }
 }

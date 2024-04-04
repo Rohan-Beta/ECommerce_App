@@ -1,7 +1,9 @@
 // ignore_for_file: prefer_const_constructors, prefer_is_empty, sized_box_for_whitespace, prefer_const_literals_to_create_immutables
 
-import 'package:ecommerce/backend/trending_cloths.dart';
+import 'package:ecommerce/backend/cloths_items.dart';
 import 'package:ecommerce/modell/cloth_model.dart';
+import 'package:ecommerce/users/screen/item_detail_screen.dart';
+import 'package:ecommerce/utilss/next_screen.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_rating_bar/flutter_rating_bar.dart';
 
@@ -30,7 +32,13 @@ class TrendingItems {
                 ClothesModel eachItemData = snapshot.data![index];
 
                 return GestureDetector(
-                  onTap: () {},
+                  onTap: () {
+                    nextScreen(
+                        context,
+                        ItemDetailScreen(
+                          itemInfo: eachItemData,
+                        ));
+                  },
                   child: Container(
                     width: 200,
                     margin: EdgeInsets.fromLTRB(index == 0 ? 16 : 8, 10,

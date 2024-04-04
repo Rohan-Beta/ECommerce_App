@@ -1,5 +1,7 @@
 // ignore_for_file: prefer_const_constructors, must_be_immutable, avoid_print, avoid_function_literals_in_foreach_calls, prefer_is_empty, sized_box_for_whitespace, prefer_const_literals_to_create_immutables
 
+import 'package:ecommerce/backend/cloths_items.dart';
+import 'package:ecommerce/widgetss/all_items.dart';
 import 'package:ecommerce/widgetss/search_bar.dart';
 import 'package:ecommerce/widgetss/trending_items.dart';
 import 'package:flutter/material.dart';
@@ -45,7 +47,8 @@ class HomeScreen extends StatelessWidget {
                     fontSize: 24,
                   ),
                 ),
-              )
+              ),
+              MyAllItem().allItems(context),
             ],
           ),
         ),
