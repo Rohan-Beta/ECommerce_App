@@ -2,6 +2,7 @@
 
 import 'package:ecommerce/backend/cloths_items.dart';
 import 'package:ecommerce/modell/cloth_model.dart';
+import 'package:ecommerce/modell/user_model.dart';
 import 'package:ecommerce/users/screen/item_detail_screen.dart';
 import 'package:ecommerce/utilss/next_screen.dart';
 import 'package:flutter/material.dart';
@@ -34,10 +35,11 @@ class TrendingItems {
                 return GestureDetector(
                   onTap: () {
                     nextScreen(
-                        context,
-                        ItemDetailScreen(
-                          itemInfo: eachItemData,
-                        ));
+                      context,
+                      ItemDetailScreen(
+                        itemInfo: eachItemData,
+                      ),
+                    );
                   },
                   child: Container(
                     width: 200,

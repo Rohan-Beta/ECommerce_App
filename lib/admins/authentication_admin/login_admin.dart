@@ -5,6 +5,7 @@ import 'dart:convert';
 import 'package:ecommerce/admins/screen_admin/admin_upload_items.dart';
 import 'package:ecommerce/admins/authentication_admin/signin_admin.dart';
 import 'package:ecommerce/api_connection/api_connection.dart';
+import 'package:ecommerce/users/authentication/login_screen.dart';
 import 'package:ecommerce/utilss/next_screen.dart';
 import 'package:ecommerce/utilss/screen_size.dart';
 import 'package:flutter/material.dart';
@@ -91,7 +92,7 @@ class _LogInScreenState extends State<LogInAdminScreen> {
         centerTitle: true,
         leading: IconButton(
           onPressed: () {
-            Navigator.pop(context);
+            nextScreenReplace(context, LogInScreen());
           },
           icon: Icon(Icons.arrow_back_ios),
         ),

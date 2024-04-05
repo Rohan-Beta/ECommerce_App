@@ -5,6 +5,7 @@ class API {
   static const hostConnectAdmin = "$hostConnect/admin";
   static const hostUploadtItem = "$hostConnect/items";
   static const hostCloth = "$hostConnect/clothes";
+  static const hostCart = "$hostConnect/cart";
 
   // signIn and logIn user
   static const validateEmail = "$hostConnectUser/validate_email.php";
@@ -22,6 +23,9 @@ class API {
   // clothes
   static const trendingClothes = "$hostCloth/trending.php";
   static const allClothes = "$hostCloth/all_items.php";
+
+  // cart
+  static const addToCart = "$hostCart/add.php";
 }
 
 // static const hostConnect = "http://ipaddress/file name in htdocs";

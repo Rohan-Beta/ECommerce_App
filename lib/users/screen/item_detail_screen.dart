@@ -1,14 +1,20 @@
-// ignore_for_file: prefer_const_constructors, prefer_const_literals_to_create_immutables, sized_box_for_whitespace
+// ignore_for_file: prefer_const_constructors, prefer_const_literals_to_create_immutables, sized_box_for_whitespace, avoid_print
 
+import 'dart:convert';
+
+import 'package:ecommerce/api_connection/api_connection.dart';
 import 'package:ecommerce/backend/item_details_controller.dart';
 import 'package:ecommerce/modell/cloth_model.dart';
+import 'package:ecommerce/users/userSharedPreferences/current_user.dart';
 import 'package:ecommerce/utilss/screen_size.dart';
-import 'package:ecommerce/widgetss/add_to_cart_widget.dart';
 import 'package:ecommerce/widgetss/color_selection_widget.dart';
 import 'package:ecommerce/widgetss/item_counter_widget.dart';
 import 'package:ecommerce/widgetss/size_selection_widget.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_rating_bar/flutter_rating_bar.dart';
+import 'package:fluttertoast/fluttertoast.dart';
+import 'package:get/get.dart';
+import 'package:http/http.dart' as http;
 
 class ItemDetailScreen extends StatefulWidget {
   final ClothesModel itemInfo;
@@ -21,7 +27,35 @@ class ItemDetailScreen extends StatefulWidget {
 
 class _ItemDetailScreenState extends State<ItemDetailScreen> {
   final ItemDetailsController itemDetailsController = ItemDetailsController();
-  // final itemDetailsController = Get.put(ItemDetailsController());
+  final CurrentUser currentUser = Get.put(CurrentUser());
+
+  addItemToCart() async {
+    try {
+      var res = await http.post(
+        Uri.parse(API.addToCart),
+        body: {
+          "user_id": currentUser.user.user_id.toString(),
+          "item_id": widget.itemInfo.item_id.toString(),
+          "item_quantity": itemDetailsController.quantity.toString(),
+          "item_color":
+              widget.itemInfo.item_colors![itemDetailsController.color],
+          "item_size": widget.itemInfo.item_sizes![itemDetailsController.size],
+        },
+      );
+      if (res.statusCode == 200) {
+        var resBodyOfAddCart = jsonDecode(res.body);
+
+        if (resBodyOfAddCart['success'] == true) {
+          Fluttertoast.showToast(msg: "Item added to cart ^-^");
+        } else {
+          Fluttertoast.showToast(msg: "Error occured , try again `-`");
+        }
+      }
+    } catch (e) {
+      print(e.toString());
+      Fluttertoast.showToast(msg: e.toString());
+    }
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -253,7 +287,31 @@ class _ItemDetailScreenState extends State<ItemDetailScreen> {
 
             SizedBox(height: 30),
 
-            AddToCartWidget().AddToCartButton(),
+            Padding(
+              padding: const EdgeInsets.only(left: 12, right: 12),
+              child: Material(
+                elevation: 4,
+                color: Colors.purpleAccent,
+                borderRadius: BorderRadius.circular(10),
+                child: InkWell(
+                  onTap: () {
+                    addItemToCart();
+                  },
+                  borderRadius: BorderRadius.circular(10),
+                  child: Container(
+                    alignment: Alignment.center,
+                    height: 50,
+                    child: Text(
+                      "Add To Cart",
+                      style: TextStyle(
+                        fontSize: 20,
+                        color: Colors.white,
+                      ),
+                    ),
+                  ),
+                ),
+              ),
+            ),
 
             SizedBox(height: 30),
           ],
