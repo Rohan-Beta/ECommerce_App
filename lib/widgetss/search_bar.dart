@@ -1,6 +1,8 @@
 // ignore_for_file: prefer_const_constructors
 
+import 'package:ecommerce/users/screen/cart_screen.dart';
 import 'package:flutter/material.dart';
+import 'package:get/get.dart';
 
 class MYSearchBar {
   Widget searchBarWidget(TextEditingController searchController) {
@@ -20,7 +22,9 @@ class MYSearchBar {
           hintText: "Looking for something cool...",
           hintStyle: TextStyle(color: Colors.grey, fontSize: 12),
           suffixIcon: IconButton(
-            onPressed: () {},
+            onPressed: () {
+              Get.to(CartScreen());
+            },
             icon: Icon(
               Icons.shopping_cart,
               color: Colors.purpleAccent,

@@ -26,6 +26,7 @@ class API {
 
   // cart
   static const addToCart = "$hostCart/add.php";
+  static const readCartList = "$hostCart/read.php";
 }
 
 // static const hostConnect = "http://ipaddress/file name in htdocs";
