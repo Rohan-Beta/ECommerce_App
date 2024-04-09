@@ -27,6 +27,8 @@ class API {
   // cart
   static const addToCart = "$hostCart/add.php";
   static const readCartList = "$hostCart/read.php";
+  static const deleteSelectedCartItems = "$hostCart/delete.php";
+  static const updateCartItems = "$hostCart/update.php";
 }
 
 // static const hostConnect = "http://ipaddress/file name in htdocs";

@@ -4,6 +4,10 @@ import 'dart:convert';
 
 import 'package:ecommerce/api_connection/api_connection.dart';
 import 'package:ecommerce/backend/cart_controller.dart';
+import 'package:ecommerce/backend/cart_total_amount.dart';
+import 'package:ecommerce/backend/delete_cart_item.dart';
+import 'package:ecommerce/backend/update_cart_items.dart';
+import 'package:ecommerce/backend/user_cart_list.dart';
 import 'package:ecommerce/modell/cart_model.dart';
 import 'package:ecommerce/modell/cloth_model.dart';
 import 'package:ecommerce/users/screen/dashboard_screen.dart';
@@ -24,62 +28,33 @@ class CartScreen extends StatefulWidget {
 
 class _CartScreenState extends State<CartScreen> {
   final CurrentUser currentUser = Get.put(CurrentUser());
-  final cartController = CartController();
+  final cartController = Get.put(CartController());
 
-  getCurrentUserCartList() async {
-    List<CartModel> cartListOfCurrentUser = [];
+  // updateItemQuantityInCart(int cartId, int newQuantity) async {
+  //   try {
+  //     var res = await http.post(Uri.parse(API.updateCartItems), body: {
+  //       "cart_id": cartId.toString(),
+  //       "item_quantity": newQuantity.toString(),
+  //     });
+  //     if (res.statusCode == 200) {
+  //       var resBodyOfNewQuantity = jsonDecode(res.body);
 
-    try {
-      var res = await http.post(
-        Uri.parse(API.readCartList),
-        body: {
-          "currentOnlineUserID": currentUser.user.user_id.toString(),
-        },
-      );
-      if (res.statusCode == 200) {
-        var resBodyOfCurrentUserCartItems = jsonDecode(res.body);
-
-        if (resBodyOfCurrentUserCartItems['success'] == true) {
-          (resBodyOfCurrentUserCartItems['currentUserCartData'] as List)
-              .forEach(
-            (eachCurrentUserCartItem) {
-              cartListOfCurrentUser
-                  .add(CartModel.fromJson(eachCurrentUserCartItem));
-            },
-          );
-        } else {
-          Fluttertoast.showToast(msg: "Error!");
-        }
-        cartController.setList(cartListOfCurrentUser);
-      }
-    } catch (e) {
-      print(e.toString());
-      Fluttertoast.showToast(msg: e.toString());
-    }
-    calculateTotalAmount();
-  }
-
-  calculateTotalAmount() {
-    cartController.setTotal(0);
-
-    if (cartController.selectedItems.length > 0) {
-      cartController.cartList.forEach(
-        (itemInCart) {
-          if (cartController.selectedItems.contains(itemInCart.item_id)) {
-            double totalAmount = (itemInCart.item_price!) *
-                (double.parse(itemInCart.item_quantity.toString()));
-
-            cartController.setTotal(cartController.total + totalAmount);
-          }
-        },
-      );
-    }
-  }
+  //       if (resBodyOfNewQuantity["success"] == true) {
+  //         CurrentUserCartList().getCurrentUserCartList();
+  //       } else {
+  //         Fluttertoast.showToast(msg: "Error~");
+  //       }
+  //     }
+  //   } catch (e) {
+  //     print(e.toString());
+  //     Fluttertoast.showToast(msg: e.toString());
+  //   }
+  // }
 
   @override
   void initState() {
     super.initState();
-    getCurrentUserCartList();
+    CurrentUserCartList().getCurrentUserCartList();
   }
 
   @override
@@ -87,13 +62,73 @@ class _CartScreenState extends State<CartScreen> {
     Size screenSize = MyScreenSize().getScreenSize();
     return Scaffold(
       appBar: AppBar(
-        title: Text("Cart"),
-        backgroundColor: Colors.grey,
+        title: Text(
+          "Cart",
+          style: TextStyle(
+            color: Colors.white,
+          ),
+        ),
+        backgroundColor: Colors.black,
         leading: IconButton(
-            onPressed: () {
-              nextScreen(context, DashboardScreen());
+          onPressed: () {
+            nextScreen(context, DashboardScreen());
+          },
+          icon: Icon(
+            Icons.arrow_back_ios,
+            color: Colors.white,
+          ),
+        ),
+        // select all items
+        actions: [
+          Obx(
+            () => IconButton(
+              onPressed: () {
+                cartController.setIsSelectedAll();
+                cartController.clearAllSelectedItems();
+
+                if (cartController.isSelectedAll) {
+                  cartController.cartList.forEach(
+                    (eachItem) {
+                      cartController.addSelected(eachItem.cart_id!);
+                    },
+                  );
+                }
+                CartTotalAmount().calculateTotalAmount();
+              },
+              icon: Icon(
+                cartController.isSelectedAll
+                    ? Icons.check_box
+                    : Icons.check_box_outline_blank,
+                color:
+                    cartController.isSelectedAll ? Colors.white : Colors.grey,
+              ),
+            ),
+          ),
+          // delete all selected items
+          GetBuilder(
+            init: CartController(),
+            builder: (c) {
+              if (cartController.selectedItems.length > 0) {
+                return IconButton(
+                  onPressed: () {
+                    cartController.selectedItems.forEach(
+                      (eachSelectedItemId) {
+                        DeleteCartItem()
+                            .deleteSelectedItemsFromCart(eachSelectedItemId);
+                      },
+                    );
+                  },
+                  icon: Icon(
+                    Icons.delete_sweep,
+                    color: Colors.redAccent,
+                  ),
+                );
+              } else {
+                return Container();
+              }
             },
-            icon: Icon(Icons.arrow_back_ios)),
+          ),
+        ],
       ),
       backgroundColor: Colors.black,
       body: SafeArea(
@@ -125,10 +160,21 @@ class _CartScreenState extends State<CartScreen> {
                             init: CartController(),
                             builder: (c) {
                               return IconButton(
-                                onPressed: () {},
+                                onPressed: () {
+                                  if (cartController.selectedItems
+                                      .contains(cartModel.cart_id)) {
+                                    cartController
+                                        .deleteSelected(cartModel.cart_id!);
+                                  } else {
+                                    cartController
+                                        .addSelected(cartModel.cart_id!);
+                                  }
+
+                                  CartTotalAmount().calculateTotalAmount();
+                                },
                                 icon: Icon(
                                   cartController.selectedItems
-                                          .contains(cartModel.item_id)
+                                          .contains(cartModel.cart_id)
                                       ? Icons.check_box
                                       : Icons.check_box_outline_blank,
                                   color: cartController.isSelectedAll
@@ -228,9 +274,97 @@ class _CartScreenState extends State<CartScreen> {
                                                   ),
                                                 ),
                                               ],
+                                            ),
+                                            SizedBox(height: 20),
+                                            Row(
+                                              crossAxisAlignment:
+                                                  CrossAxisAlignment.center,
+                                              children: [
+                                                // - button
+                                                IconButton(
+                                                  onPressed: () {
+                                                    if (cartModel
+                                                                .item_quantity! -
+                                                            1 >=
+                                                        1) {
+                                                      UpdateCartItem()
+                                                          .updateItemQuantityInCart(
+                                                              cartModel
+                                                                  .cart_id!,
+                                                              cartModel
+                                                                      .item_quantity! -
+                                                                  1);
+                                                    }
+                                                  },
+                                                  icon: Icon(
+                                                    Icons.remove_circle_outline,
+                                                    color: Colors.grey,
+                                                    size: 30,
+                                                  ),
+                                                ),
+                                                // quantity of product
+
+                                                Padding(
+                                                  padding: const EdgeInsets
+                                                      .symmetric(
+                                                      horizontal: 10),
+                                                  child: Text(
+                                                    cartModel.item_quantity
+                                                        .toString(),
+                                                    style: TextStyle(
+                                                        color:
+                                                            Colors.purpleAccent,
+                                                        fontSize: 20,
+                                                        fontWeight:
+                                                            FontWeight.bold),
+                                                  ),
+                                                ),
+
+                                                // + button
+                                                IconButton(
+                                                  onPressed: () {
+                                                    UpdateCartItem()
+                                                        .updateItemQuantityInCart(
+                                                            cartModel.cart_id!,
+                                                            cartModel
+                                                                    .item_quantity! +
+                                                                1);
+                                                  },
+                                                  icon: Icon(
+                                                    Icons.add_circle_outline,
+                                                    color: Colors.grey,
+                                                    size: 30,
+                                                  ),
+                                                ),
+                                              ],
                                             )
                                           ],
                                         ),
+                                      ),
+                                    ),
+                                    ClipRRect(
+                                      borderRadius: BorderRadius.only(
+                                        topRight: Radius.circular(22),
+                                        bottomRight: Radius.circular(22),
+                                      ),
+                                      child: FadeInImage(
+                                        height: 180,
+                                        width: 150,
+                                        fit: BoxFit.cover,
+                                        placeholder: AssetImage(
+                                            "MyAssets/imagess/place_holder.png"),
+                                        image: NetworkImage(
+                                          cartModel
+                                              .item_image!, // product image
+                                        ),
+                                        imageErrorBuilder:
+                                            (context, error, stackTrace) {
+                                          return Center(
+                                            child: Icon(
+                                              Icons.broken_image_outlined,
+                                            ),
+                                          );
+                                        },
                                       ),
                                     ),
                                   ],
@@ -253,6 +387,81 @@ class _CartScreenState extends State<CartScreen> {
                   ),
                 ),
         ),
+      ),
+      bottomNavigationBar: GetBuilder(
+        init: CartController(),
+        builder: (c) {
+          return Container(
+            decoration: BoxDecoration(
+              color: Colors.black,
+              boxShadow: [
+                BoxShadow(
+                  offset: Offset(0, -3),
+                  color: Colors.white24,
+                  blurRadius: 6,
+                ),
+              ],
+            ),
+            padding: EdgeInsets.symmetric(
+              horizontal: 16,
+              vertical: 8,
+            ),
+            child: Row(
+              children: [
+                // total amount
+
+                Text(
+                  "Total Amount",
+                  style: TextStyle(
+                    fontSize: 14,
+                    color: Colors.white38,
+                    fontWeight: FontWeight.bold,
+                  ),
+                ),
+                SizedBox(width: 4),
+
+                Obx(
+                  () => Text(
+                    "₹" + cartController.total.toStringAsFixed(2),
+                    maxLines: 1,
+                    style: TextStyle(
+                      color: Colors.white70,
+                      fontSize: 20,
+                      fontWeight: FontWeight.bold,
+                    ),
+                  ),
+                ),
+                Spacer(),
+                Padding(
+                  padding: const EdgeInsets.only(left: 12, right: 12),
+                  child: Material(
+                    elevation: 4,
+                    color: cartController.selectedItems.length > 0
+                        ? Colors.purpleAccent
+                        : Colors.white24,
+                    borderRadius: BorderRadius.circular(30),
+                    child: InkWell(
+                      onTap: () {},
+                      borderRadius: BorderRadius.circular(10),
+                      child: Container(
+                        alignment: Alignment.center,
+                        height: 50,
+                        width: 100,
+                        child: Text(
+                          "Order Now",
+                          style: TextStyle(
+                            fontSize: 14,
+                            color: Colors.white,
+                          ),
+                        ),
+                      ),
+                    ),
+                  ),
+                ),
+              ],
+            ),
+          );
+        },
       ),
     );
   }
