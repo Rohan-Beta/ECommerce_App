@@ -5,11 +5,14 @@ import 'dart:convert';
 import 'package:ecommerce/api_connection/api_connection.dart';
 import 'package:ecommerce/backend/item_details_controller.dart';
 import 'package:ecommerce/modell/cloth_model.dart';
+import 'package:ecommerce/users/screen/dashboard_screen.dart';
 import 'package:ecommerce/users/userSharedPreferences/current_user.dart';
+import 'package:ecommerce/utilss/next_screen.dart';
 import 'package:ecommerce/utilss/screen_size.dart';
 import 'package:ecommerce/widgetss/color_selection_widget.dart';
 import 'package:ecommerce/widgetss/item_counter_widget.dart';
 import 'package:ecommerce/widgetss/size_selection_widget.dart';
+import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_rating_bar/flutter_rating_bar.dart';
 import 'package:fluttertoast/fluttertoast.dart';
@@ -26,8 +29,8 @@ class ItemDetailScreen extends StatefulWidget {
 }
 
 class _ItemDetailScreenState extends State<ItemDetailScreen> {
-  final ItemDetailsController itemDetailsController = ItemDetailsController();
-  final CurrentUser currentUser = Get.put(CurrentUser());
+  final itemDetailsController = Get.put(ItemDetailsController());
+  final currentUser = Get.put(CurrentUser());
 
   addItemToCart() async {
     try {
@@ -57,6 +60,91 @@ class _ItemDetailScreenState extends State<ItemDetailScreen> {
     }
   }
 
+  validateFavoriteList() async {
+    try {
+      var res = await http.post(
+        Uri.parse(API.validateFavorite),
+        body: {
+          "user_id": currentUser.user.user_id.toString(),
+          "item_id": widget.itemInfo.item_id.toString(),
+        },
+      );
+      if (res.statusCode == 200) {
+        var resBodyOfValidateFavorite = jsonDecode(res.body);
+
+        if (resBodyOfValidateFavorite['favoriteFound'] == true) {
+          // Fluttertoast.showToast(msg: "Item is in favorite list ^-^");
+
+          itemDetailsController.setIsFavourite(true);
+        } else {
+          // Fluttertoast.showToast(msg: "Item is not in favorite list `-`");
+
+          itemDetailsController.setIsFavourite(false);
+        }
+      }
+    } catch (e) {
+      print(e.toString());
+    }
+  }
+
+  addItemToFavorite() async {
+    try {
+      var res = await http.post(
+        Uri.parse(API.addToFavorite),
+        body: {
+          "user_id": currentUser.user.user_id.toString(),
+          "item_id": widget.itemInfo.item_id.toString(),
+        },
+      );
+      if (res.statusCode == 200) {
+        var resBodyOfaddFavorite = jsonDecode(res.body);
+
+        if (resBodyOfaddFavorite['success'] == true) {
+          Fluttertoast.showToast(msg: "Item added to favorite ^-^");
+
+          validateFavoriteList();
+        } else {
+          Fluttertoast.showToast(msg: "Error occured , try again `-`");
+        }
+      }
+    } catch (e) {
+      print(e.toString());
+      Fluttertoast.showToast(msg: e.toString());
+    }
+  }
+
+  deleteItemFromFavorite() async {
+    try {
+      var res = await http.post(
+        Uri.parse(API.deleteFromFavorite),
+        body: {
+          "user_id": currentUser.user.user_id.toString(),
+          "item_id": widget.itemInfo.item_id.toString(),
+        },
+      );
+      if (res.statusCode == 200) {
+        var resBodyOfdeleteFavorite = jsonDecode(res.body);
+
+        if (resBodyOfdeleteFavorite['success'] == true) {
+          Fluttertoast.showToast(msg: "Item deleted from favorite ^-^");
+
+          validateFavoriteList();
+        } else {
+          Fluttertoast.showToast(msg: "Error occured , Item not deleted `-`");
+        }
+      }
+    } catch (e) {
+      print(e.toString());
+      Fluttertoast.showToast(msg: e.toString());
+    }
+  }
+
+  @override
+  void initState() {
+    super.initState();
+    validateFavoriteList();
+  }
+
   @override
   Widget build(BuildContext context) {
     Size screenSize = MyScreenSize().getScreenSize();
@@ -84,10 +172,58 @@ class _ItemDetailScreenState extends State<ItemDetailScreen> {
                 );
               },
             ),
+            // item information
+
             Align(
               alignment: Alignment.bottomCenter,
               child: itemInfoWidget(),
-            )
+            ),
+            Positioned(
+              left: 0,
+              right: 0,
+              child: Container(
+                color: Colors.transparent,
+                child: Row(
+                  children: [
+                    // back button
+
+                    IconButton(
+                      onPressed: () {
+                        nextScreen(context, DashboardScreen());
+                      },
+                      icon: Icon(
+                        Icons.arrow_back_ios,
+                        color: Colors.purpleAccent,
+                      ),
+                    ),
+
+                    Spacer(),
+
+                    // favorite button
+
+                    Obx(
+                      () => IconButton(
+                        onPressed: () {
+                          if (itemDetailsController.isFavorite == true) {
+                            // delete item from favourite
+                            deleteItemFromFavorite();
+                          } else {
+                            // add item to favourite
+                            addItemToFavorite();
+                          }
+                        },
+                        icon: Icon(
+                          itemDetailsController.isFavorite
+                              ? CupertinoIcons.heart_fill
+                              : CupertinoIcons.heart,
+                          color: Colors.redAccent,
+                        ),
+                      ),
+                    ),
+                  ],
+                ),
+              ),
+            ),
           ],
         ),
       ),

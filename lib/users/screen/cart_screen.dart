@@ -1,8 +1,5 @@
 // ignore_for_file: avoid_function_literals_in_foreach_calls, avoid_print, prefer_is_empty, prefer_const_constructors, prefer_const_literals_to_create_immutables, prefer_interpolation_to_compose_strings
 
-import 'dart:convert';
-
-import 'package:ecommerce/api_connection/api_connection.dart';
 import 'package:ecommerce/backend/cart_controller.dart';
 import 'package:ecommerce/backend/cart_total_amount.dart';
 import 'package:ecommerce/backend/delete_cart_item.dart';
@@ -15,9 +12,7 @@ import 'package:ecommerce/users/userSharedPreferences/current_user.dart';
 import 'package:ecommerce/utilss/next_screen.dart';
 import 'package:ecommerce/utilss/screen_size.dart';
 import 'package:flutter/material.dart';
-import 'package:fluttertoast/fluttertoast.dart';
 import 'package:get/get.dart';
-import 'package:http/http.dart' as http;
 
 class CartScreen extends StatefulWidget {
   const CartScreen({super.key});
@@ -29,27 +24,6 @@ class CartScreen extends StatefulWidget {
 class _CartScreenState extends State<CartScreen> {
   final CurrentUser currentUser = Get.put(CurrentUser());
   final cartController = Get.put(CartController());
-
-  // updateItemQuantityInCart(int cartId, int newQuantity) async {
-  //   try {
-  //     var res = await http.post(Uri.parse(API.updateCartItems), body: {
-  //       "cart_id": cartId.toString(),
-  //       "item_quantity": newQuantity.toString(),
-  //     });
-  //     if (res.statusCode == 200) {
-  //       var resBodyOfNewQuantity = jsonDecode(res.body);
-
-  //       if (resBodyOfNewQuantity["success"] == true) {
-  //         CurrentUserCartList().getCurrentUserCartList();
-  //       } else {
-  //         Fluttertoast.showToast(msg: "Error~");
-  //       }
-  //     }
-  //   } catch (e) {
-  //     print(e.toString());
-  //     Fluttertoast.showToast(msg: e.toString());
-  //   }
-  // }
 
   @override
   void initState() {
