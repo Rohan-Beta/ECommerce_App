@@ -1,8 +1,7 @@
 // ignore_for_file: prefer_const_constructors, prefer_const_literals_to_create_immutables, sized_box_for_whitespace, avoid_print
 
-import 'dart:convert';
-
-import 'package:ecommerce/api_connection/api_connection.dart';
+import 'package:ecommerce/backend/add_cart_item.dart';
+import 'package:ecommerce/backend/favorite_backend.dart';
 import 'package:ecommerce/backend/item_details_controller.dart';
 import 'package:ecommerce/modell/cloth_model.dart';
 import 'package:ecommerce/users/screen/dashboard_screen.dart';
@@ -15,9 +14,7 @@ import 'package:ecommerce/widgetss/size_selection_widget.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_rating_bar/flutter_rating_bar.dart';
-import 'package:fluttertoast/fluttertoast.dart';
 import 'package:get/get.dart';
-import 'package:http/http.dart' as http;
 
 class ItemDetailScreen extends StatefulWidget {
   final ClothesModel itemInfo;
@@ -30,119 +27,12 @@ class ItemDetailScreen extends StatefulWidget {
 
 class _ItemDetailScreenState extends State<ItemDetailScreen> {
   final itemDetailsController = Get.put(ItemDetailsController());
-  final currentUser = Get.put(CurrentUser());
-
-  addItemToCart() async {
-    try {
-      var res = await http.post(
-        Uri.parse(API.addToCart),
-        body: {
-          "user_id": currentUser.user.user_id.toString(),
-          "item_id": widget.itemInfo.item_id.toString(),
-          "item_quantity": itemDetailsController.quantity.toString(),
-          "item_color":
-              widget.itemInfo.item_colors![itemDetailsController.color],
-          "item_size": widget.itemInfo.item_sizes![itemDetailsController.size],
-        },
-      );
-      if (res.statusCode == 200) {
-        var resBodyOfAddCart = jsonDecode(res.body);
-
-        if (resBodyOfAddCart['success'] == true) {
-          Fluttertoast.showToast(msg: "Item added to cart ^-^");
-        } else {
-          Fluttertoast.showToast(msg: "Error occured , try again `-`");
-        }
-      }
-    } catch (e) {
-      print(e.toString());
-      Fluttertoast.showToast(msg: e.toString());
-    }
-  }
-
-  validateFavoriteList() async {
-    try {
-      var res = await http.post(
-        Uri.parse(API.validateFavorite),
-        body: {
-          "user_id": currentUser.user.user_id.toString(),
-          "item_id": widget.itemInfo.item_id.toString(),
-        },
-      );
-      if (res.statusCode == 200) {
-        var resBodyOfValidateFavorite = jsonDecode(res.body);
-
-        if (resBodyOfValidateFavorite['favoriteFound'] == true) {
-          // Fluttertoast.showToast(msg: "Item is in favorite list ^-^");
-
-          itemDetailsController.setIsFavourite(true);
-        } else {
-          // Fluttertoast.showToast(msg: "Item is not in favorite list `-`");
-
-          itemDetailsController.setIsFavourite(false);
-        }
-      }
-    } catch (e) {
-      print(e.toString());
-    }
-  }
-
-  addItemToFavorite() async {
-    try {
-      var res = await http.post(
-        Uri.parse(API.addToFavorite),
-        body: {
-          "user_id": currentUser.user.user_id.toString(),
-          "item_id": widget.itemInfo.item_id.toString(),
-        },
-      );
-      if (res.statusCode == 200) {
-        var resBodyOfaddFavorite = jsonDecode(res.body);
-
-        if (resBodyOfaddFavorite['success'] == true) {
-          Fluttertoast.showToast(msg: "Item added to favorite ^-^");
-
-          validateFavoriteList();
-        } else {
-          Fluttertoast.showToast(msg: "Error occured , try again `-`");
-        }
-      }
-    } catch (e) {
-      print(e.toString());
-      Fluttertoast.showToast(msg: e.toString());
-    }
-  }
-
-  deleteItemFromFavorite() async {
-    try {
-      var res = await http.post(
-        Uri.parse(API.deleteFromFavorite),
-        body: {
-          "user_id": currentUser.user.user_id.toString(),
-          "item_id": widget.itemInfo.item_id.toString(),
-        },
-      );
-      if (res.statusCode == 200) {
-        var resBodyOfdeleteFavorite = jsonDecode(res.body);
-
-        if (resBodyOfdeleteFavorite['success'] == true) {
-          Fluttertoast.showToast(msg: "Item deleted from favorite ^-^");
-
-          validateFavoriteList();
-        } else {
-          Fluttertoast.showToast(msg: "Error occured , Item not deleted `-`");
-        }
-      }
-    } catch (e) {
-      print(e.toString());
-      Fluttertoast.showToast(msg: e.toString());
-    }
-  }
+  final CurrentUser currentUser = Get.put(CurrentUser());
 
   @override
   void initState() {
     super.initState();
-    validateFavoriteList();
+    FavoriteBackend().validateFavoriteList(widget.itemInfo);
   }
 
   @override
@@ -204,16 +94,18 @@ class _ItemDetailScreenState extends State<ItemDetailScreen> {
                     Obx(
                       () => IconButton(
                         onPressed: () {
-                          if (itemDetailsController.isFavorite == true) {
+                          if (itemDetailsController.isFavourite == true) {
                             // delete item from favourite
-                            deleteItemFromFavorite();
+                            FavoriteBackend()
+                                .deleteItemFromFavorite(widget.itemInfo);
                           } else {
                             // add item to favourite
-                            addItemToFavorite();
+                            FavoriteBackend()
+                                .addItemToFavorite(widget.itemInfo);
                           }
                         },
                         icon: Icon(
-                          itemDetailsController.isFavorite
+                          itemDetailsController.isFavourite
                               ? CupertinoIcons.heart_fill
                               : CupertinoIcons.heart,
                           color: Colors.redAccent,
@@ -431,7 +323,7 @@ class _ItemDetailScreenState extends State<ItemDetailScreen> {
                 borderRadius: BorderRadius.circular(10),
                 child: InkWell(
                   onTap: () {
-                    addItemToCart();
+                    AddCartItem().addItemToCart(widget.itemInfo);
                   },
                   borderRadius: BorderRadius.circular(10),
                   child: Container(

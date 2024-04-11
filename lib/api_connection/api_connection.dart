@@ -34,6 +34,7 @@ class API {
   // favorite
   static const validateFavorite = "$hostFavorite/validate.php";
   static const addToFavorite = "$hostFavorite/add.php";
+  static const readFavorite = "$hostFavorite/read.php";
   static const deleteFromFavorite = "$hostFavorite/delete.php";
 }
 

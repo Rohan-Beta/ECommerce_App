@@ -6,12 +6,12 @@ class ItemDetailsController extends GetxController {
   RxInt _quantityItem = 1.obs;
   RxInt _sizeItem = 0.obs;
   RxInt _colorItem = 0.obs;
-  RxBool _isFavorite = false.obs;
+  RxBool _isFavourite = false.obs;
 
   int get quantity => _quantityItem.value;
   int get size => _sizeItem.value;
   int get color => _colorItem.value;
-  bool get isFavorite => _isFavorite.value;
+  bool get isFavourite => _isFavourite.value;
 
   setQuantityItem(int quantityOfItem) {
     _quantityItem.value = quantityOfItem;
@@ -25,7 +25,7 @@ class ItemDetailsController extends GetxController {
     _colorItem.value = colorOfItem;
   }
 
-  setIsFavourite(bool isFavorite) {
-    _isFavorite.value = isFavorite;
+  setIsFavourite(bool isFavourite) {
+    _isFavourite.value = isFavourite;
   }
 }
