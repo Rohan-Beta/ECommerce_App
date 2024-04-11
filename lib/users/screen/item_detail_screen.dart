@@ -79,7 +79,7 @@ class _ItemDetailScreenState extends State<ItemDetailScreen> {
 
                     IconButton(
                       onPressed: () {
-                        nextScreen(context, DashboardScreen());
+                        Navigator.pop(context);
                       },
                       icon: Icon(
                         Icons.arrow_back_ios,

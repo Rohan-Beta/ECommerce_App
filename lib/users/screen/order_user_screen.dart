@@ -1,4 +1,4 @@
-// ignore_for_file: prefer_const_constructors
+// ignore_for_file: prefer_const_constructors, must_be_immutable, prefer_const_literals_to_create_immutables
 
 import 'package:flutter/material.dart';
 
@@ -8,11 +8,10 @@ class OrderUserScreen extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
+      backgroundColor: Colors.black,
       body: SafeArea(
-        child: Scaffold(
-          body: Center(
-            child: Text("Order Fragment Screen"),
-          ),
+        child: Center(
+          child: Text("Order Screen"),
         ),
       ),
     );

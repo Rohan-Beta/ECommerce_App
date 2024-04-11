@@ -9,6 +9,8 @@ import 'package:ecommerce/modell/cart_model.dart';
 import 'package:ecommerce/modell/cloth_model.dart';
 import 'package:ecommerce/users/screen/dashboard_screen.dart';
 import 'package:ecommerce/users/screen/item_detail_screen.dart';
+import 'package:ecommerce/users/screen/order_now_screen.dart';
+import 'package:ecommerce/users/screen/order_user_screen.dart';
 import 'package:ecommerce/users/userSharedPreferences/current_user.dart';
 import 'package:ecommerce/utilss/next_screen.dart';
 import 'package:ecommerce/utilss/screen_size.dart';
@@ -25,6 +27,30 @@ class CartScreen extends StatefulWidget {
 class _CartScreenState extends State<CartScreen> {
   final CurrentUser currentUser = Get.put(CurrentUser());
   final cartController = Get.put(CartController());
+
+  List<Map<String, dynamic>> getSelectedCartItemInfo() {
+    List<Map<String, dynamic>> selectedCartItemInfo = [];
+
+    if (cartController.selectedItems.length > 0) {
+      cartController.cartList.forEach(
+        (selectedCartItem) {
+          if (cartController.selectedItems.contains(selectedCartItem.cart_id)) {
+            Map<String, dynamic> itemInfo = {
+              "item_id": selectedCartItem.item_id,
+              "item_name": selectedCartItem.item_name,
+              "item_quantity": selectedCartItem.item_quantity,
+              "item_color": selectedCartItem.item_color,
+              "item_size": selectedCartItem.item_size,
+              "total_amount": selectedCartItem.item_price! *
+                  selectedCartItem.item_quantity!,
+            };
+            selectedCartItemInfo.add(itemInfo);
+          }
+        },
+      );
+    }
+    return selectedCartItemInfo;
+  }
 
   @override
   void initState() {
@@ -410,6 +436,7 @@ class _CartScreenState extends State<CartScreen> {
                   ),
                 ),
                 Spacer(),
+                // oder now button
                 Padding(
                   padding: const EdgeInsets.only(left: 12, right: 12),
                   child: Material(
@@ -419,7 +446,18 @@ class _CartScreenState extends State<CartScreen> {
                         : Colors.white24,
                     borderRadius: BorderRadius.circular(30),
                     child: InkWell(
-                      onTap: () {},
+                      onTap: () {
+                        cartController.selectedItems.length > 0
+                            ? Get.to(
+                                OrderNowScreen(
+                                  selectedCartListItemsInfo:
+                                      getSelectedCartItemInfo(),
+                                  totalAmount: cartController.total,
+                                  selectedCartId: cartController.selectedItems,
+                                ),
+                              )
+                            : null;
+                      },
                       borderRadius: BorderRadius.circular(10),
                       child: Container(
                         alignment: Alignment.center,

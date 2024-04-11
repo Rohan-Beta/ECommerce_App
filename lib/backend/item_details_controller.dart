@@ -25,7 +25,7 @@ class ItemDetailsController extends GetxController {
     _colorItem.value = colorOfItem;
   }
 
-  setIsFavourite(bool isFavourite) {
-    _isFavourite.value = isFavourite;
+  setIsFavourite(bool isFavourites) {
+    _isFavourite.value = isFavourites;
   }
 }
