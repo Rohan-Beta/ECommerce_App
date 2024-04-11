@@ -3,8 +3,8 @@
 import 'package:ecommerce/backend/cloths_items.dart';
 import 'package:ecommerce/modell/cloth_model.dart';
 import 'package:ecommerce/users/screen/item_detail_screen.dart';
-import 'package:ecommerce/utilss/next_screen.dart';
 import 'package:flutter/material.dart';
+import 'package:get/get.dart';
 
 class MyAllItem {
   Widget allItems(context) {
@@ -32,11 +32,17 @@ class MyAllItem {
 
               return GestureDetector(
                 onTap: () {
-                  nextScreen(
-                      context,
-                      ItemDetailScreen(
-                        itemInfo: eachItemData,
-                      ));
+                  Get.to(
+                    ItemDetailScreen(
+                      itemInfo: eachItemData,
+                    ),
+                  );
+                  // nextScreen(
+                  //   context,
+                  //   ItemDetailScreen(
+                  //     itemInfo: eachItemData,
+                  //   ),
+                  // );
                 },
                 child: Container(
                   margin: EdgeInsets.fromLTRB(

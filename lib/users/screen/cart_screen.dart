@@ -8,6 +8,7 @@ import 'package:ecommerce/backend/user_cart_list.dart';
 import 'package:ecommerce/modell/cart_model.dart';
 import 'package:ecommerce/modell/cloth_model.dart';
 import 'package:ecommerce/users/screen/dashboard_screen.dart';
+import 'package:ecommerce/users/screen/item_detail_screen.dart';
 import 'package:ecommerce/users/userSharedPreferences/current_user.dart';
 import 'package:ecommerce/utilss/next_screen.dart';
 import 'package:ecommerce/utilss/screen_size.dart';
@@ -160,7 +161,10 @@ class _CartScreenState extends State<CartScreen> {
                           ),
                           Expanded(
                             child: GestureDetector(
-                              onTap: () {},
+                              onTap: () {
+                                Get.to(
+                                    ItemDetailScreen(itemInfo: clothesModel));
+                              },
                               child: Container(
                                 margin: EdgeInsets.fromLTRB(
                                   0,

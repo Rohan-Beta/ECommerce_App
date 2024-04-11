@@ -3,7 +3,7 @@ class API {
   static const hostConnect = "http://192.168.0.7/api_ecommerce";
   static const hostConnectUser = "$hostConnect/user";
   static const hostConnectAdmin = "$hostConnect/admin";
-  static const hostUploadtItem = "$hostConnect/items";
+  static const hostItem = "$hostConnect/items";
   static const hostCloth = "$hostConnect/clothes";
   static const hostCart = "$hostConnect/cart";
   static const hostFavorite = "$hostConnect/favorite";
@@ -19,7 +19,9 @@ class API {
   static const adminLogin = "$hostConnectAdmin/login.php";
 
   // upload and save items info
-  static const uploadNewItem = "$hostUploadtItem/upload_items.php";
+  static const uploadNewItem = "$hostItem/upload_items.php";
+  // search for items
+  static const searchItem = "$hostItem/search.php";
 
   // clothes
   static const trendingClothes = "$hostCloth/trending.php";

@@ -5,7 +5,8 @@ import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 
 class MYSearchBar {
-  Widget searchBarWidget(TextEditingController searchController) {
+  Widget searchBarWidget(
+      TextEditingController searchController, var onPressed) {
     return Padding(
       padding: EdgeInsets.symmetric(horizontal: 18),
       child: TextField(
@@ -13,7 +14,7 @@ class MYSearchBar {
         controller: searchController,
         decoration: InputDecoration(
           prefixIcon: IconButton(
-            onPressed: () {},
+            onPressed: onPressed,
             icon: Icon(
               Icons.search,
               color: Colors.purpleAccent,

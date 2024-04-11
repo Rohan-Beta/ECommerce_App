@@ -2,11 +2,10 @@
 
 import 'package:ecommerce/backend/cloths_items.dart';
 import 'package:ecommerce/modell/cloth_model.dart';
-import 'package:ecommerce/modell/user_model.dart';
 import 'package:ecommerce/users/screen/item_detail_screen.dart';
-import 'package:ecommerce/utilss/next_screen.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_rating_bar/flutter_rating_bar.dart';
+import 'package:get/get.dart';
 
 class TrendingItems {
   Widget trendingMostPupularItem(context) {
@@ -34,12 +33,17 @@ class TrendingItems {
 
                 return GestureDetector(
                   onTap: () {
-                    nextScreen(
-                      context,
+                    Get.to(
                       ItemDetailScreen(
                         itemInfo: eachItemData,
                       ),
                     );
+                    // nextScreen(
+                    //   context,
+                    //   ItemDetailScreen(
+                    //     itemInfo: eachItemData,
+                    //   ),
+                    // );
                   },
                   child: Container(
                     width: 200,
