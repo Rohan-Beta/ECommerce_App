@@ -10,7 +10,6 @@ import 'package:ecommerce/modell/cloth_model.dart';
 import 'package:ecommerce/users/screen/dashboard_screen.dart';
 import 'package:ecommerce/users/screen/item_detail_screen.dart';
 import 'package:ecommerce/users/screen/order_now_screen.dart';
-import 'package:ecommerce/users/screen/order_user_screen.dart';
 import 'package:ecommerce/users/userSharedPreferences/current_user.dart';
 import 'package:ecommerce/utilss/next_screen.dart';
 import 'package:ecommerce/utilss/screen_size.dart';
@@ -43,6 +42,7 @@ class _CartScreenState extends State<CartScreen> {
               "item_size": selectedCartItem.item_size,
               "total_amount": selectedCartItem.item_price! *
                   selectedCartItem.item_quantity!,
+              "item_image": selectedCartItem.item_image
             };
             selectedCartItemInfo.add(itemInfo);
           }

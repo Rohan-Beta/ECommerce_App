@@ -37,12 +37,6 @@ class MyAllItem {
                       itemInfo: eachItemData,
                     ),
                   );
-                  // nextScreen(
-                  //   context,
-                  //   ItemDetailScreen(
-                  //     itemInfo: eachItemData,
-                  //   ),
-                  // );
                 },
                 child: Container(
                   margin: EdgeInsets.fromLTRB(

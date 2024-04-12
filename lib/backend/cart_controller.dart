@@ -23,8 +23,8 @@ class CartController extends GetxController {
     update();
   }
 
-  deleteSelected(int SelectedItemCartID) {
-    _selectedItems.value.remove(SelectedItemCartID);
+  deleteSelected(int selectedItemCartID) {
+    _selectedItems.value.remove(selectedItemCartID);
     update();
   }
 
