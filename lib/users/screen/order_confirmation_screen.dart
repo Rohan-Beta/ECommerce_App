@@ -1,13 +1,18 @@
-// ignore_for_file: prefer_const_constructors, prefer_const_literals_to_create_immutables, prefer_final_fields, must_be_immutable, prefer_is_empty
+// ignore_for_file: prefer_const_constructors, prefer_const_literals_to_create_immutables, prefer_final_fields, must_be_immutable, prefer_is_empty, depend_on_referenced_packages, avoid_print
 
+import 'dart:convert';
 import 'dart:typed_data';
 
+import 'package:ecommerce/api_connection/api_connection.dart';
+import 'package:ecommerce/modell/order_model.dart';
+import 'package:ecommerce/users/userSharedPreferences/current_user.dart';
 import 'package:ecommerce/utilss/screen_size.dart';
 import 'package:flutter/material.dart';
 import 'package:fluttertoast/fluttertoast.dart';
 import 'package:get/get.dart';
 import 'package:image_picker/image_picker.dart';
 import 'package:path/path.dart' as path;
+import 'package:http/http.dart' as http;
 
 class OrderConfirmationScreen extends StatelessWidget {
   final List<int>? selectedCartId;
@@ -30,14 +35,14 @@ class OrderConfirmationScreen extends StatelessWidget {
     required this.shipmentAddress,
     required this.note,
   });
+  final ImagePicker _picker = ImagePicker();
+  CurrentUser currentUser = Get.put(CurrentUser());
 
   RxList<int> _imageSelectedByte = <int>[].obs;
   Uint8List get imageSelectedByte => Uint8List.fromList(_imageSelectedByte);
 
   RxString _imageSelectedName = "".obs;
   String get imageSelectedName => _imageSelectedName.value;
-
-  final ImagePicker _picker = ImagePicker();
 
   setSelectedImageByte(Uint8List selectedImageByte) {
     _imageSelectedByte.value = selectedImageByte;
@@ -56,6 +61,40 @@ class OrderConfirmationScreen extends StatelessWidget {
 
       setSelectedImageByte(bytesOfImage);
       setSelectedImageName(path.basename(pickedImageXFile.path));
+    }
+  }
+
+  saveNewOrderInfo() async {
+    String selectedItemString = selectedCartListItemsInfo!
+        .map((eachSelectedItem) => jsonEncode(eachSelectedItem))
+        .toList()
+        .join("||");
+
+    OrderModel orderModel = OrderModel(
+      order_id: 1,
+      user_id: currentUser.user.user_id,
+      selected_items: selectedItemString,
+      delivery_system: deliverySystem,
+      payment_system: paymentSystem,
+      note: note,
+      total_amount: totalAmount,
+      image: imageSelectedName,
+      status: "",
+      date_time: DateTime.now(),
+      shipment_address: shipmentAddress,
+      phone_number: phoneNumber,
+    );
+
+    try {
+      var res = await http.post(
+        Uri.parse(API.addToOrder),
+        body: orderModel.toJson(
+          base64Encode(imageSelectedByte),
+        ),
+      );
+    } catch (e) {
+      print(e.toString());
+      Fluttertoast.showToast(msg: e.toString());
     }
   }
 
@@ -152,6 +191,7 @@ class OrderConfirmationScreen extends StatelessWidget {
                     onPressed: () {
                       if (imageSelectedByte.length > 0) {
                         // save order info
+                        saveNewOrderInfo();
                       } else {
                         Fluttertoast.showToast(
                             msg:
