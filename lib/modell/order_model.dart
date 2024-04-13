@@ -28,6 +28,22 @@ class OrderModel {
     required this.shipment_address,
     required this.phone_number,
   });
+
+  factory OrderModel.fromJson(Map<String, dynamic> json) => OrderModel(
+        order_id: int.parse(json["order_id"]),
+        user_id: int.parse(json["user_id"]),
+        selected_items: json["selected_items"],
+        delivery_system: json["delivery_system"],
+        payment_system: json["payment_system"],
+        note: json["note"],
+        total_amount: double.parse(json["total_amount"]),
+        image: json["image"],
+        status: json["status"],
+        date_time: DateTime.parse(json["date_time"]),
+        shipment_address: json["shipment_address"],
+        phone_number: json["phone_number"],
+      );
+
   Map<String, dynamic> toJson(String imageSelectedBase64) => {
         "order_id": order_id.toString(),
         "user_id": user_id.toString(),

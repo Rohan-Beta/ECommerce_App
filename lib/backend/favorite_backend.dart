@@ -54,7 +54,7 @@ class FavoriteBackend {
       if (res.statusCode == 200) {
         var resBodyOfaddFavorite = jsonDecode(res.body);
 
-        if (resBodyOfaddFavorite['success'] == true) {
+        if (resBodyOfaddFavorite["success"] == true) {
           Fluttertoast.showToast(msg: "Item added to favorite ^-^");
 
           validateFavoriteList(itemInfo);
@@ -80,7 +80,7 @@ class FavoriteBackend {
       if (res.statusCode == 200) {
         var resBodyOfdeleteFavorite = jsonDecode(res.body);
 
-        if (resBodyOfdeleteFavorite['success'] == true) {
+        if (resBodyOfdeleteFavorite["success"] == true) {
           Fluttertoast.showToast(msg: "Item deleted from favorite ^-^");
 
           validateFavoriteList(itemInfo);
@@ -107,9 +107,8 @@ class FavoriteBackend {
       if (res.statusCode == 200) {
         var resBodyOfCurrentUserFavoriteItems = jsonDecode(res.body);
 
-        if (resBodyOfCurrentUserFavoriteItems['success'] == true) {
-          (resBodyOfCurrentUserFavoriteItems['currentUserFavoritetData']
-                  as List)
+        if (resBodyOfCurrentUserFavoriteItems["success"] == true) {
+          (resBodyOfCurrentUserFavoriteItems['currentUserFavoriteData'] as List)
               .forEach(
             (eachCurrentUserFavoriteItem) {
               favoriteListOfCurrentUser
