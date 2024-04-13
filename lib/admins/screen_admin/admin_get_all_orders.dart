@@ -12,30 +12,26 @@ import 'package:get/get.dart';
 import 'package:http/http.dart' as http;
 import 'package:intl/intl.dart';
 
-class OrderUserScreen extends StatelessWidget {
-  OrderUserScreen({super.key});
+class AdminGetAllOrdersScreen extends StatelessWidget {
+  AdminGetAllOrdersScreen({super.key});
 
   final currentUser = Get.put(CurrentUser());
 
-  Future<List<OrderModel>> getCurrentUserOrderList() async {
-    List<OrderModel> orderListOfCurrentUser = [];
+  Future<List<OrderModel>> getAllOrderList() async {
+    List<OrderModel> orderList = [];
 
     try {
       var res = await http.post(
-        Uri.parse(API.readOrders),
-        body: {
-          "currentOnlineUserID": currentUser.user.user_id.toString(),
-        },
+        Uri.parse(API.adminGetAllOrders),
+        body: {},
       );
       if (res.statusCode == 200) {
         var resBodyOfCurrentUserOrderItems = jsonDecode(res.body);
 
         if (resBodyOfCurrentUserOrderItems['success'] == true) {
-          (resBodyOfCurrentUserOrderItems['currentUserOrderData'] as List)
-              .forEach(
-            (eachCurrentUserOrderItem) {
-              orderListOfCurrentUser
-                  .add(OrderModel.fromJson(eachCurrentUserOrderItem));
+          (resBodyOfCurrentUserOrderItems['allOrdersData'] as List).forEach(
+            (eachOrderData) {
+              orderList.add(OrderModel.fromJson(eachOrderData));
             },
           );
         }
@@ -44,7 +40,7 @@ class OrderUserScreen extends StatelessWidget {
       print(e.toString());
       Fluttertoast.showToast(msg: e.toString());
     }
-    return orderListOfCurrentUser;
+    return orderList;
   }
 
   @override
@@ -58,15 +54,10 @@ class OrderUserScreen extends StatelessWidget {
             Padding(
               padding: EdgeInsets.fromLTRB(16, 24, 8, 0),
               child: Row(
-                mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                mainAxisAlignment: MainAxisAlignment.center,
                 children: [
                   // my order
 
-                  // GestureDetector(
-                  //   onTap: () {
-                  //     // send user to order history screen
-                  //   },
-                  //   child:
                   Padding(
                     padding: const EdgeInsets.all(8),
                     child: Column(
@@ -76,50 +67,28 @@ class OrderUserScreen extends StatelessWidget {
                           width: 140,
                         ),
                         Text(
-                          "My Orders",
+                          "Order Requests",
                           style: TextStyle(
                             color: Colors.purpleAccent,
                             fontSize: 24,
                             fontWeight: FontWeight.bold,
                           ),
                         ),
-                      ],
-                    ),
-                  ),
-                  // ),
-                  // orders history
-
-                  GestureDetector(
-                    onTap: () {},
-                    child: Column(
-                      children: [
-                        Image.asset(
-                          "MyAssets/imagess/history_icon.png",
-                          width: 45,
-                        ),
-                        Text(
-                          "Orders History",
-                          style: TextStyle(
-                            color: Colors.purpleAccent,
-                            fontSize: 12,
-                            fontWeight: FontWeight.bold,
+                        Padding(
+                          padding: EdgeInsets.symmetric(horizontal: 30),
+                          child: Text(
+                            "Orders request from buyers",
+                            style: TextStyle(
+                              fontSize: 16,
+                              color: Colors.white,
+                              fontWeight: FontWeight.w400,
+                            ),
                           ),
                         ),
                       ],
                     ),
                   ),
                 ],
-              ),
-            ),
-            Padding(
-              padding: EdgeInsets.symmetric(horizontal: 30),
-              child: Text(
-                "Here are your successfully placed orders. ",
-                style: TextStyle(
-                  fontSize: 16,
-                  color: Colors.white,
-                  fontWeight: FontWeight.w400,
-                ),
               ),
             ),
 
@@ -136,7 +105,7 @@ class OrderUserScreen extends StatelessWidget {
 
   Widget displayOrderList(context) {
     return FutureBuilder(
-      future: getCurrentUserOrderList(),
+      future: getAllOrderList(),
       builder: (context, snapshot) {
         if (snapshot.connectionState == ConnectionState.waiting) {
           return Center(

@@ -2,7 +2,9 @@
 
 import 'dart:convert';
 
+import 'package:ecommerce/api_connection/api_connection.dart';
 import 'package:ecommerce/modell/order_model.dart';
+import 'package:ecommerce/utilss/screen_size.dart';
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
 
@@ -20,6 +22,8 @@ class OrderUserDetailScreen extends StatefulWidget {
 class _OrderUserDetailScreenState extends State<OrderUserDetailScreen> {
   @override
   Widget build(BuildContext context) {
+    Size screenSize = MyScreenSize().getScreenSize();
+
     return Scaffold(
       backgroundColor: Colors.black,
       appBar: AppBar(
@@ -41,6 +45,64 @@ class _OrderUserDetailScreenState extends State<OrderUserDetailScreen> {
               children: [
                 // display items belong to clicked order
                 displayClickedOrderItem(),
+
+                SizedBox(height: 20),
+
+                showTitle("Phone Number: "),
+                SizedBox(height: 8),
+                showContentText(widget.clickedOrderInfo.phone_number!),
+
+                SizedBox(height: 30),
+
+                showTitle("Shipment Address: "),
+                SizedBox(height: 8),
+                showContentText(widget.clickedOrderInfo.shipment_address!),
+
+                SizedBox(height: 30),
+
+                showTitle("Delivery System: "),
+                SizedBox(height: 8),
+                showContentText(widget.clickedOrderInfo.delivery_system!),
+
+                SizedBox(height: 30),
+
+                showTitle("Payment System: "),
+                SizedBox(height: 8),
+                showContentText(
+                    widget.clickedOrderInfo.payment_system.toString()),
+
+                SizedBox(height: 30),
+
+                showTitle("Note To Seller: "),
+                SizedBox(height: 8),
+                showContentText(widget.clickedOrderInfo.note!),
+
+                SizedBox(height: 30),
+
+                showTitle("Total Amount: "),
+                SizedBox(height: 8),
+                showContentText(
+                    widget.clickedOrderInfo.total_amount.toString()),
+
+                SizedBox(height: 30),
+
+                showTitle("Payment Proof: "),
+                SizedBox(height: 8),
+                FadeInImage(
+                  width: screenSize.width * 0.8,
+                  fit: BoxFit.fitWidth,
+                  placeholder: AssetImage("MyAssets/imagess/place_holder.png"),
+                  image: NetworkImage(
+                    API.hostTransactionImages + widget.clickedOrderInfo.image!,
+                  ),
+                  imageErrorBuilder: (context, error, stackTrace) {
+                    return Center(
+                      child: Icon(
+                        Icons.broken_image_outlined,
+                      ),
+                    );
+                  },
+                ),
               ],
             ),
           ),
@@ -49,7 +111,29 @@ class _OrderUserDetailScreenState extends State<OrderUserDetailScreen> {
     );
   }
 
-  displayClickedOrderItem() {
+  Widget showTitle(String titleText) {
+    return Text(
+      titleText,
+      style: TextStyle(
+        fontWeight: FontWeight.bold,
+        fontSize: 20,
+        color: Colors.grey,
+      ),
+    );
+  }
+
+  Widget showContentText(String contentText) {
+    return Text(
+      contentText,
+      style: TextStyle(
+        fontWeight: FontWeight.bold,
+        fontSize: 14,
+        color: Colors.white,
+      ),
+    );
+  }
+
+  Widget displayClickedOrderItem() {
     List<String> clickedOrderItemInfo =
         widget.clickedOrderInfo.selected_items!.split("||");
     return Column(

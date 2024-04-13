@@ -8,6 +8,8 @@ class API {
   static const hostCart = "$hostConnect/cart";
   static const hostFavorite = "$hostConnect/favorite";
   static const hostOrder = "$hostConnect/order";
+  static const hostTransactionImages =
+      "$hostConnect/transactions_proof_images/";
 
   // signIn and logIn user
   static const validateEmail = "$hostConnectUser/validate_email.php";
@@ -18,6 +20,7 @@ class API {
   static const adminValidateEmail = "$hostConnectAdmin/validate_email.php";
   static const adminSignUp = "$hostConnectAdmin/signup.php";
   static const adminLogin = "$hostConnectAdmin/login.php";
+  static const adminGetAllOrders = "$hostConnectAdmin/read_orders.php";
 
   // upload and save items info
   static const uploadNewItem = "$hostItem/upload_items.php";

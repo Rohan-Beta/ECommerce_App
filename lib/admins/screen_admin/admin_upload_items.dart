@@ -1,9 +1,11 @@
 // ignore_for_file: prefer_const_constructors, prefer_const_literals_to_create_immutables, use_build_context_synchronously
 
 import 'package:ecommerce/admins/authentication_admin/login_admin.dart';
+import 'package:ecommerce/admins/screen_admin/admin_get_all_orders.dart';
 import 'package:ecommerce/admins/screen_admin/upload_item_desc_admin.dart';
 import 'package:ecommerce/utilss/next_screen.dart';
 import 'package:flutter/material.dart';
+import 'package:get/get.dart';
 import 'package:image_picker/image_picker.dart';
 
 class AdminUploadItemsScreen extends StatefulWidget {
@@ -99,9 +101,18 @@ class _AdminUploadItemsState extends State<AdminUploadItemsScreen> {
                   ),
                 ),
               ),
-              title: Text(
-                "Welcome Admin",
-                style: TextStyle(color: Colors.white),
+              title: GestureDetector(
+                onTap: () {
+                  Get.to(AdminGetAllOrdersScreen());
+                },
+                child: Text(
+                  "New Orders",
+                  style: TextStyle(
+                    color: Colors.green,
+                    fontSize: 16,
+                    fontWeight: FontWeight.bold,
+                  ),
+                ),
               ),
               centerTitle: true,
               leading: IconButton(
