@@ -1,10 +1,11 @@
-// ignore_for_file: prefer_const_constructors, prefer_const_literals_to_create_immutables, prefer_final_fields, must_be_immutable, prefer_is_empty, depend_on_referenced_packages, avoid_print
+// ignore_for_file: prefer_const_constructors, prefer_const_literals_to_create_immutables, prefer_final_fields, must_be_immutable, prefer_is_empty, depend_on_referenced_packages, avoid_print, prefer_interpolation_to_compose_strings, avoid_function_literals_in_foreach_calls
 
 import 'dart:convert';
 import 'dart:typed_data';
 
 import 'package:ecommerce/api_connection/api_connection.dart';
 import 'package:ecommerce/modell/order_model.dart';
+import 'package:ecommerce/users/screen/dashboard_screen.dart';
 import 'package:ecommerce/users/userSharedPreferences/current_user.dart';
 import 'package:ecommerce/utilss/screen_size.dart';
 import 'package:flutter/material.dart';
@@ -78,8 +79,10 @@ class OrderConfirmationScreen extends StatelessWidget {
       payment_system: paymentSystem,
       note: note,
       total_amount: totalAmount,
-      image: imageSelectedName,
-      status: "",
+      image: DateTime.now().microsecondsSinceEpoch.toString() +
+          "-" +
+          imageSelectedName,
+      status: "new",
       date_time: DateTime.now(),
       shipment_address: shipmentAddress,
       phone_number: phoneNumber,
@@ -92,9 +95,43 @@ class OrderConfirmationScreen extends StatelessWidget {
           base64Encode(imageSelectedByte),
         ),
       );
+      if (res.statusCode == 200) {
+        var responseBodyOfAddNewOrder = jsonDecode(res.body);
+
+        if (responseBodyOfAddNewOrder["success"] == true) {
+          // delete selected item from user cart
+
+          selectedCartId!.forEach(
+            (eachSelectedItemCartId) {
+              deleteSelectedItemsFromCart(eachSelectedItemCartId);
+            },
+          );
+          Get.to(DashboardScreen());
+        } else {
+          Fluttertoast.showToast(msg: "Error! order not placed");
+        }
+      }
     } catch (e) {
       print(e.toString());
       Fluttertoast.showToast(msg: e.toString());
+    }
+  }
+
+  deleteSelectedItemsFromCart(int cartId) async {
+    try {
+      var res = await http.post(Uri.parse(API.deleteSelectedCartItems), body: {
+        "cart_id": cartId.toString(),
+      });
+      if (res.statusCode == 200) {
+        var resBodyFromDeleteCart = jsonDecode(res.body);
+
+        if (resBodyFromDeleteCart["success"] == true) {
+          Fluttertoast.showToast(
+              msg: "Your new order has been placed successfully");
+        }
+      }
+    } catch (e) {
+      print(e.toString());
     }
   }
 

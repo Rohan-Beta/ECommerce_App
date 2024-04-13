@@ -26,13 +26,13 @@ class OrderNowScreen extends StatelessWidget {
   List<String> deliverySystemNamesList = [
     "FedEx",
     "DHL (recommended)",
-    "United Parcel Service"
+    // "United Parcel Service"
   ];
   List<String> paymentSystemNamesList = [
     "Apple Pay",
     "Google Pay",
     "Phone Pay",
-    "Cash On Delivery"
+    // "Cash On Delivery"
   ];
 
   @override

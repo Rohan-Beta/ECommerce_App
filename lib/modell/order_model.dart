@@ -29,8 +29,8 @@ class OrderModel {
     required this.phone_number,
   });
   Map<String, dynamic> toJson(String imageSelectedBase64) => {
-        "order_id": order_id,
-        "user_id": user_id,
+        "order_id": order_id.toString(),
+        "user_id": user_id.toString(),
         "selected_items": selected_items,
         "delivery_system": delivery_system,
         "payment_system": payment_system,
@@ -38,7 +38,6 @@ class OrderModel {
         "total_amount": total_amount!.toStringAsFixed(2),
         "image": image,
         "status": status,
-        "date_time": date_time,
         "shipment_address": shipment_address,
         "phone_number": phone_number,
         "image_file": imageSelectedBase64
