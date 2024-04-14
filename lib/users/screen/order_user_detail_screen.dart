@@ -121,6 +121,12 @@ class _OrderUserDetailScreenState extends State<OrderUserDetailScreen> {
             fontSize: 14,
           ),
         ),
+        leading: IconButton(
+          onPressed: () {
+            Navigator.pop(context);
+          },
+          icon: Icon(Icons.arrow_back_ios_new),
+        ),
         actions: [
           Padding(
             padding: EdgeInsets.fromLTRB(8, 8, 16, 8),
@@ -295,27 +301,33 @@ class _OrderUserDetailScreenState extends State<OrderUserDetailScreen> {
             child: Row(
               children: [
                 // image
+
                 ClipRRect(
                   borderRadius: BorderRadius.only(
                     bottomLeft: Radius.circular(20),
                     topLeft: Radius.circular(20),
                   ),
-                  child: FadeInImage(
-                    height: 150,
-                    width: 130,
-                    fit: BoxFit.cover,
-                    placeholder:
-                        AssetImage("MyAssets/imagess/place_holder.png"),
-                    image: NetworkImage(
-                      itemInfo["item_image"], // product image
-                    ),
-                    imageErrorBuilder: (context, error, stackTrace) {
-                      return Center(
-                        child: Icon(
-                          Icons.broken_image_outlined,
-                        ),
-                      );
+                  child: GestureDetector(
+                    onTap: () {
+                      // Get.to(ItemDetailScreen(itemInfo: itemInfo));
                     },
+                    child: FadeInImage(
+                      height: 150,
+                      width: 130,
+                      fit: BoxFit.cover,
+                      placeholder:
+                          AssetImage("MyAssets/imagess/place_holder.png"),
+                      image: NetworkImage(
+                        itemInfo["item_image"], // product image
+                      ),
+                      imageErrorBuilder: (context, error, stackTrace) {
+                        return Center(
+                          child: Icon(
+                            Icons.broken_image_outlined,
+                          ),
+                        );
+                      },
+                    ),
                   ),
                 ),
                 // name

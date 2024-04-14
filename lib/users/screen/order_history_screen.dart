@@ -4,7 +4,6 @@ import 'dart:convert';
 
 import 'package:ecommerce/api_connection/api_connection.dart';
 import 'package:ecommerce/modell/order_model.dart';
-import 'package:ecommerce/users/screen/order_history_screen.dart';
 import 'package:ecommerce/users/screen/order_user_detail_screen.dart';
 import 'package:ecommerce/users/userSharedPreferences/current_user.dart';
 import 'package:flutter/material.dart';
@@ -13,8 +12,8 @@ import 'package:get/get.dart';
 import 'package:http/http.dart' as http;
 import 'package:intl/intl.dart';
 
-class OrderUserScreen extends StatelessWidget {
-  OrderUserScreen({super.key});
+class OrderHistoryScreen extends StatelessWidget {
+  OrderHistoryScreen({super.key});
 
   final currentUser = Get.put(CurrentUser());
 
@@ -23,16 +22,17 @@ class OrderUserScreen extends StatelessWidget {
 
     try {
       var res = await http.post(
-        Uri.parse(API.readOrders),
+        Uri.parse(API.orderHistory),
         body: {
           "currentOnlineUserID": currentUser.user.user_id.toString(),
         },
       );
       if (res.statusCode == 200) {
-        var resBodyOfCurrentUserOrderItems = jsonDecode(res.body);
+        var resBodyOfCurrentUserOrderHistoryItems = jsonDecode(res.body);
 
-        if (resBodyOfCurrentUserOrderItems['success'] == true) {
-          (resBodyOfCurrentUserOrderItems['currentUserOrderData'] as List)
+        if (resBodyOfCurrentUserOrderHistoryItems['success'] == true) {
+          (resBodyOfCurrentUserOrderHistoryItems['currentUserOrderHistoryData']
+                  as List)
               .forEach(
             (eachCurrentUserOrderItem) {
               orderListOfCurrentUser
@@ -52,62 +52,28 @@ class OrderUserScreen extends StatelessWidget {
   Widget build(BuildContext context) {
     return Scaffold(
       backgroundColor: Colors.black,
+      appBar: AppBar(
+        title: Text(
+          "Order History",
+          style: TextStyle(color: Colors.white),
+        ),
+        backgroundColor: Colors.black,
+        leading: IconButton(
+          onPressed: () {
+            Navigator.pop(context);
+          },
+          icon: Icon(
+            Icons.arrow_back_ios_new,
+            color: Colors.white,
+          ),
+        ),
+      ),
       body: SafeArea(
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
-            Padding(
-              padding: EdgeInsets.fromLTRB(16, 24, 8, 0),
-              child: Row(
-                mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                children: [
-                  // my order
+            SizedBox(height: 20),
 
-                  Padding(
-                    padding: const EdgeInsets.all(8),
-                    child: Column(
-                      children: [
-                        Image.asset(
-                          "MyAssets/imagess/orders_icon.png",
-                          width: 140,
-                        ),
-                        Text(
-                          "My Orders",
-                          style: TextStyle(
-                            color: Colors.purpleAccent,
-                            fontSize: 24,
-                            fontWeight: FontWeight.bold,
-                          ),
-                        ),
-                      ],
-                    ),
-                  ),
-                  // orders history
-
-                  GestureDetector(
-                    onTap: () {
-                      Get.to(OrderHistoryScreen());
-                    },
-                    child: Column(
-                      children: [
-                        Image.asset(
-                          "MyAssets/imagess/history_icon.png",
-                          width: 45,
-                        ),
-                        Text(
-                          "Orders History",
-                          style: TextStyle(
-                            color: Colors.purpleAccent,
-                            fontSize: 12,
-                            fontWeight: FontWeight.bold,
-                          ),
-                        ),
-                      ],
-                    ),
-                  ),
-                ],
-              ),
-            ),
             Padding(
               padding: EdgeInsets.symmetric(horizontal: 30),
               child: Text(

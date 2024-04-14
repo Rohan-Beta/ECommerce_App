@@ -4,7 +4,7 @@ import 'dart:convert';
 
 import 'package:ecommerce/api_connection/api_connection.dart';
 import 'package:ecommerce/modell/order_model.dart';
-import 'package:ecommerce/users/screen/order_user_detail_scree.dart';
+import 'package:ecommerce/users/screen/order_user_detail_screen.dart';
 import 'package:ecommerce/users/userSharedPreferences/current_user.dart';
 import 'package:flutter/material.dart';
 import 'package:fluttertoast/fluttertoast.dart';
