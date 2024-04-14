@@ -46,6 +46,7 @@ class API {
   // order
   static const addToOrder = "$hostOrder/add.php";
   static const readOrders = "$hostOrder/read.php";
+  static const updateOrderStatus = "$hostOrder/update_status.php";
 }
 
 // static const hostConnect = "http://ipaddress/file name in htdocs";

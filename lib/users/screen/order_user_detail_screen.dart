@@ -1,4 +1,4 @@
-// ignore_for_file: prefer_const_constructors, prefer_const_literals_to_create_immutables
+// ignore_for_file: prefer_const_constructors, prefer_const_literals_to_create_immutables, prefer_final_fields, avoid_print
 
 import 'dart:convert';
 
@@ -6,7 +6,10 @@ import 'package:ecommerce/api_connection/api_connection.dart';
 import 'package:ecommerce/modell/order_model.dart';
 import 'package:ecommerce/utilss/screen_size.dart';
 import 'package:flutter/material.dart';
+import 'package:fluttertoast/fluttertoast.dart';
+import 'package:get/get.dart';
 import 'package:intl/intl.dart';
+import 'package:http/http.dart' as http;
 
 class OrderUserDetailScreen extends StatefulWidget {
   final OrderModel clickedOrderInfo;
@@ -20,6 +23,89 @@ class OrderUserDetailScreen extends StatefulWidget {
 }
 
 class _OrderUserDetailScreenState extends State<OrderUserDetailScreen> {
+  RxString _status = "new".obs;
+  String get status => _status.value;
+
+  updateParcelStatusForUI(String parcelStatus) {
+    _status.value = parcelStatus;
+  }
+
+  showDialogBoxForParcelStatus() async {
+    if (widget.clickedOrderInfo.status == "new") {
+      var res = await Get.dialog(
+        AlertDialog(
+          backgroundColor: Colors.black,
+          title: Text(
+            "Confiramtion",
+            style: TextStyle(
+              color: Colors.white,
+              fontWeight: FontWeight.bold,
+            ),
+          ),
+          content: Text(
+            "Have you reveived your parcel?",
+            style: TextStyle(color: Colors.grey),
+          ),
+          actions: [
+            TextButton(
+              onPressed: () {
+                Get.back();
+              },
+              child: Text(
+                "No",
+                style: TextStyle(
+                  color: Colors.redAccent,
+                ),
+              ),
+            ),
+            TextButton(
+              onPressed: () {
+                Get.back(result: "yesConfirmed");
+              },
+              child: Text(
+                "Yes",
+                style: TextStyle(
+                  color: Colors.greenAccent,
+                ),
+              ),
+            ),
+          ],
+        ),
+      );
+      if (res == "yesConfirmed") {
+        updateStatusValueInDB();
+      }
+    }
+  }
+
+  updateStatusValueInDB() async {
+    try {
+      var res = await http.post(
+        Uri.parse(API.updateOrderStatus),
+        body: {
+          "order_id": widget.clickedOrderInfo.order_id.toString(),
+        },
+      );
+      if (res.statusCode == 200) {
+        var resBodyOfUpdateStatus = jsonDecode(res.body);
+
+        if (resBodyOfUpdateStatus["success"] == true) {
+          updateParcelStatusForUI("arrived");
+        }
+      }
+    } catch (e) {
+      print(e.toString());
+      Fluttertoast.showToast(msg: e.toString());
+    }
+  }
+
+  @override
+  void initState() {
+    super.initState();
+
+    updateParcelStatusForUI(widget.clickedOrderInfo.status.toString());
+  }
+
   @override
   Widget build(BuildContext context) {
     Size screenSize = MyScreenSize().getScreenSize();
@@ -35,6 +121,51 @@ class _OrderUserDetailScreenState extends State<OrderUserDetailScreen> {
             fontSize: 14,
           ),
         ),
+        actions: [
+          Padding(
+            padding: EdgeInsets.fromLTRB(8, 8, 16, 8),
+            child: Material(
+              color: Colors.white30,
+              borderRadius: BorderRadius.circular(10),
+              child: InkWell(
+                onTap: () {
+                  if (status == "new") {
+                    showDialogBoxForParcelStatus();
+                  }
+                },
+                borderRadius: BorderRadius.circular(30),
+                child: Padding(
+                  padding:
+                      const EdgeInsets.symmetric(horizontal: 16, vertical: 4),
+                  child: Row(
+                    children: [
+                      Text(
+                        "Received",
+                        style: TextStyle(
+                          fontSize: 14,
+                          fontWeight: FontWeight.bold,
+                          color: Colors.white,
+                        ),
+                      ),
+                      SizedBox(width: 10),
+                      Obx(
+                        () => status == "new"
+                            ? Icon(
+                                Icons.help_outline,
+                                color: Colors.redAccent,
+                              )
+                            : Icon(
+                                Icons.check_circle_outline,
+                                color: Colors.greenAccent,
+                              ),
+                      ),
+                    ],
+                  ),
+                ),
+              ),
+            ),
+          ),
+        ],
       ),
       body: SafeArea(
         child: SingleChildScrollView(
