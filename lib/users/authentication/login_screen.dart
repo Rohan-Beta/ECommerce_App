@@ -60,7 +60,7 @@ class _LogInScreenState extends State<LogInScreen> {
 
           await RememberUserPrefs.storeUserInfo(userInfo);
 
-          Future.delayed(Duration(seconds: 2), () {
+          Future.delayed(Duration(seconds: 1), () {
             isChecking!.change(false);
             isHandsUp!.change(false);
             trigFail!.change(false);
